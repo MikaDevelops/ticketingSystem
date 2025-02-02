@@ -1,5 +1,7 @@
 package MikaDevelops.ticketingSystem;
 
+import MikaDevelops.ticketingSystem.dataRepository.DataBaseService;
+import MikaDevelops.ticketingSystem.dataRepository.SqliteDatabase;
 import MikaDevelops.ticketingSystem.incident.Incident;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

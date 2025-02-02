@@ -1,4 +1,4 @@
-package MikaDevelops.ticketingSystem;
+package MikaDevelops.ticketingSystem.dataRepository;
 
 import MikaDevelops.ticketingSystem.incident.Incident;
 

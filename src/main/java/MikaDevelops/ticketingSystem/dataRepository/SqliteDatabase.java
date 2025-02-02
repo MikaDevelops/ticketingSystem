@@ -1,4 +1,4 @@
-package MikaDevelops.ticketingSystem;
+package MikaDevelops.ticketingSystem.dataRepository;
 
 import MikaDevelops.ticketingSystem.incident.Incident;
 
@@ -8,7 +8,7 @@ public class SqliteDatabase implements DataBaseService{
 
     private final String databaseAddress;
 
-    SqliteDatabase (String databaseAddress) {
+    public SqliteDatabase(String databaseAddress) {
         this.databaseAddress = databaseAddress;
     }
 
