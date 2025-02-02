@@ -10,6 +10,7 @@ public class SqliteDatabase implements DataBaseService{
 
     public SqliteDatabase(String databaseAddress) {
         this.databaseAddress = databaseAddress;
+        this.initializeDataBase();
     }
 
     @Override

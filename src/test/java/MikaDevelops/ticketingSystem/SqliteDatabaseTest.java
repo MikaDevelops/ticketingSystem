@@ -15,8 +15,6 @@ class SqliteDatabaseTest {
     @BeforeAll
     static void setUp() {
         dbService = new SqliteDatabase("test.db");
-        dbService.initializeDataBase();
-
     }
 
     @Test
