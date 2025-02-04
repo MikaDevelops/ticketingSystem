@@ -19,20 +19,100 @@ public class SqliteDatabase implements DataBaseService{
         try (
                 Statement statement = connection.createStatement();
         ) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS incident ("+
-                    "incident_id INTEGER PRIMARY KEY,"+
-                    "created_datetime INTEGER NOT NULL,"+
-                    "subject TEXT NOT NULL,"+
-                    "description TEXT NOT NULL,"+
-                    "notes TEXT,"+
-                    "related_incidents TEXT,"+
-                    "status_id INTEGER,"+
-                    "customer_id INTEGER,"+
-                    "priority_id INTEGER,"+
-                    "solution_id INTEGER"+
-                    ")");
+
+            statement.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS customer
+                    (
+                      customer_id INTEGER PRIMARY KEY,
+                      first_name TEXT NOT NULL,
+                      middle_name TEXT,
+                      last_name TEXT NOT NULL
+                    );
+                    """);
+
+            statement.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS status
+                    (
+                      status_id INTEGER PRIMARY KEY,
+                      name TEXT NOT NULL
+                    );
+                    """);
+
+            statement.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS category
+                    (
+                      category_id INTEGER PRIMARY KEY,
+                      name TEXT NOT NULL
+                    );
+                    """);
+
+            statement.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS priority
+                    (
+                      priority_id INTEGER PRIMARY KEY,
+                      description TEXT NOT NULL
+                    );
+                    """);
+
+            statement.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS solution
+                    (
+                      solution_id INTEGER PRIMARY KEY,
+                      description TEXT NOT NULL
+                    );
+                    """);
+
+            statement.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS service_person
+                    (
+                      person_id INTEGER PRIMARY KEY,
+                      name TEXT NOT NULL
+                    );
+                    """);
+
+            statement.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS incident
+                    (
+                      incident_id INTEGER PRIMARY KEY,
+                      created_datetime INT NOT NULL,
+                      subject TEXT NOT NULL,
+                      description TEXT NOT NULL,
+                      notes TEXT,
+                      related_incidents TEXT,
+                      status_id INT NOT NULL,
+                      customer_id INT NOT NULL,
+                      priority_id INT NOT NULL,
+                      solution_id INT,
+                      FOREIGN KEY (status_id) REFERENCES status(status_id),
+                      FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+                      FOREIGN KEY (priority_id) REFERENCES priority(priority_id),
+                      FOREIGN KEY (solution_id) REFERENCES solution(solution_id)
+                    );
+                    """);
+
+            statement.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS incident_category
+                    (
+                      category_id INT NOT NULL,
+                      incident_id INT NOT NULL,
+                      FOREIGN KEY (category_id) REFERENCES category(category_id),
+                      FOREIGN KEY (incident_id) REFERENCES incident(incident_id)
+                    );
+                    """);
+
+            statement.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS incident_service_person
+                    (
+                      person_id INT NOT NULL,
+                      incident_id INT NOT NULL,
+                      FOREIGN KEY (person_id) REFERENCES service_person(person_id),
+                      FOREIGN KEY (incident_id) REFERENCES incident(incident_id)
+                    );
+                    """);
+
             connection.commit();
             connection.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
