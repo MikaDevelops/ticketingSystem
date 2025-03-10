@@ -1,9 +1,12 @@
 package MikaDevelops.ticketingSystem.dataRepository;
 
 import MikaDevelops.ticketingSystem.incident.Incident;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.List;
 
+@Repository
 public class SqliteDatabase implements DataBaseService{
 
     private final String databaseAddress;
@@ -148,6 +151,18 @@ public class SqliteDatabase implements DataBaseService{
         catch (SQLException e){e.printStackTrace();}
 
         return null;
+    }
+
+    @Override
+    public List<Incident> getAllIncidents(){
+        try( Connection connection = this.getConnection(); ){
+            //TODO: should return all incidents
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     @Override
