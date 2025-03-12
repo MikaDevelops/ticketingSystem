@@ -5,6 +5,7 @@ import MikaDevelops.ticketingSystem.dataRepository.SqliteDatabase;
 import MikaDevelops.ticketingSystem.incident.Incident;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,22 +15,29 @@ class SqliteDatabaseTest {
 
     @BeforeAll
     static void setUp() {
-        dbService = new SqliteDatabase("test.db");
+        dbService = new SqliteDatabase("testing.db");
     }
 
     @Test
     void getIncidentById() {
 
+        // Expected values
         long incidentId      = 1L;
         long createdDate     = 15115L;
         String subject       = "test subject";
         String description   = "test description";
         String notes         = "test notes";
-        String relIncidents = "1,2,3,4";
-        long statusId      = 1L;
+        String relIncidents  = "1,2,3,4";
+        long statusId        = 1L;
         long customerId      = 1L;
         long priorityId      = 1L;
         long solutionId      = 1L;
+        String statusName    = "new";
+        String solutionDesc  = "Coffee on keyboard dryed using hairdryer.";
+        String customerFirstName = "John";
+        String customerMiddleName= "Milton";
+        String customerLastName  = "Holmes";
+        String priorityDesc  = "normal";
 
         Incident incident = dbService.getIncidentById(incidentId);
 
@@ -43,5 +51,16 @@ class SqliteDatabaseTest {
         assertEquals(customerId, incident.getCustomerId());
         assertEquals(priorityId, incident.getPriorityId());
         assertEquals(solutionId, incident.getSolutionId());
+        assertEquals(statusName, incident.getStatusName());
+        assertEquals(solutionDesc, incident.getSolutionDescription());
+        assertEquals(customerFirstName, incident.getCustomerFirstName());
+        assertEquals(customerMiddleName, incident.getCustomerMiddleName());
+        assertEquals(customerLastName, incident.getCustomerLastName());
+        assertEquals(priorityDesc, incident.getPriorityDescription());
+    }
+
+    @Test
+    void shouldRerturnAllIncidents(){
+
     }
 }

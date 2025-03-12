@@ -1,9 +1,11 @@
 package MikaDevelops.ticketingSystem.dataRepository;
 
 import MikaDevelops.ticketingSystem.incident.Incident;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -11,7 +13,7 @@ public class SqliteDatabase implements DataBaseService{
 
     private final String databaseAddress;
 
-    public SqliteDatabase(String databaseAddress) {
+    public SqliteDatabase(@Qualifier("dataBaseAddress") String databaseAddress) {
         this.databaseAddress = databaseAddress;
         this.initializeDataBase();
     }
@@ -20,7 +22,7 @@ public class SqliteDatabase implements DataBaseService{
     public void initializeDataBase() {
         Connection connection = this.getConnection();
         try (
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ) {
 
             statement.executeUpdate("""
@@ -125,9 +127,19 @@ public class SqliteDatabase implements DataBaseService{
     public Incident getIncidentById(long id) {
         Connection connection = this.getConnection();
         try (
-                PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM incident WHERE incident_id = ?"
-                );
+                PreparedStatement statement = connection.prepareStatement("""
+                SELECT
+                incident.incident_id, incident.created_datetime, incident.subject, incident.description AS incident_desc,
+                incident.notes, incident.related_incidents, incident.status_id, incident.customer_id,
+                incident.priority_id, incident.solution_id, status.name AS status_name, customer.first_name, customer.middle_name,
+                customer.last_name, priority.description AS priority_desc , solution.description AS solution_desc\s
+                FROM incident
+                LEFT JOIN status ON incident.status_id = status.status_id
+                LEFT JOIN solution ON incident.solution_id = solution.solution_id
+                LEFT JOIN customer ON incident.customer_id = customer.customer_id
+                LEFT JOIN priority ON incident.priority_id = priority.priority_id
+                WHERE incident_id = ?;
+                """);
             )
         {
             statement.setLong(1, id);
@@ -138,13 +150,15 @@ public class SqliteDatabase implements DataBaseService{
                 incident.setIncidentId(result.getLong("incident_id"));
                 incident.setCreatedDatetime(result.getLong("created_datetime"));
                 incident.setSubject(result.getString("subject"));
-                incident.setDescription(result.getString("description"));
+                incident.setDescription(result.getString("incident_desc"));
                 incident.setNotes(result.getString("notes"));
                 incident.setRelatedIncidentsId(result.getString("related_incidents"));
                 incident.setStatusId(result.getLong("status_id"));
                 incident.setCustomerId(result.getLong("customer_id"));
                 incident.setPriorityId(result.getLong("priority_id"));
                 incident.setSolutionId(result.getLong("solution_id"));
+                incident.setStatusName(result.getString("status_name"));
+                incident.setSolutionDescription(result.getString("solution_desc"));
             }
             return incident;
         }
@@ -157,6 +171,7 @@ public class SqliteDatabase implements DataBaseService{
     public List<Incident> getAllIncidents(){
         try( Connection connection = this.getConnection(); ){
             //TODO: should return all incidents
+            String sqlString = "SELECT created_datetime";
             return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);

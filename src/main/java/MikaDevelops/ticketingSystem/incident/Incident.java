@@ -12,6 +12,8 @@ public class Incident {
     private long customerId;
     private long priorityId;
     private long solutionId;
+    private String statusName;
+    private String solutionDescription;
 
     public long getIncidentId() {
         return incidentId;
@@ -92,4 +94,37 @@ public class Incident {
     public void setSolutionId(long solutionId) {
         this.solutionId = solutionId;
     }
+
+    public String getStatusName() {
+        return this.statusName;
+    }
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
+    public String getSolutionDescription() {
+        return this.solutionDescription;
+    }
+
+    public void setSolutionDescription(String description) {
+        this.solutionDescription = description;
+    }
+
+    public String getCustomerFirstName() {
+        return "";
+    }
+
+    public String getCustomerMiddleName() {
+        return "";
+    }
+
+    public String getCustomerLastName() {
+        return "";
+    }
+
+    public String getPriorityDescription() {
+        return "";
+    }
+
+
 }
