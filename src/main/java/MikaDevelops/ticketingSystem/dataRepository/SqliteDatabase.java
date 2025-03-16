@@ -131,14 +131,23 @@ public class SqliteDatabase implements DataBaseService{
                 SELECT
                 incident.incident_id, incident.created_datetime, incident.subject, incident.description AS incident_desc,
                 incident.notes, incident.related_incidents, incident.status_id, incident.customer_id,
-                incident.priority_id, incident.solution_id, status.name AS status_name, customer.first_name, customer.middle_name,
-                customer.last_name, priority.description AS priority_desc , solution.description AS solution_desc\s
+                incident.priority_id, incident.solution_id, status.name AS status_name,
+                customer.first_name AS customer_first_name, customer.middle_name AS customer_middle_name,
+                customer.last_name AS customer_last_name,
+                priority.description AS priority_desc , solution.description AS solution_desc
                 FROM incident
                 LEFT JOIN status ON incident.status_id = status.status_id
                 LEFT JOIN solution ON incident.solution_id = solution.solution_id
                 LEFT JOIN customer ON incident.customer_id = customer.customer_id
                 LEFT JOIN priority ON incident.priority_id = priority.priority_id
                 WHERE incident_id = ?;
+                """);
+
+                PreparedStatement statementServicePersons = connection.prepareStatement(
+            """
+                SELECT DISTINCT service_person.person_id, service_person.name FROM service_person
+                LEFT JOIN incident_service_person ON incident_service_person.person_id = service_person.person_id
+                WHERE incident_service_person.incident_id = ?;
                 """);
             )
         {
@@ -159,7 +168,21 @@ public class SqliteDatabase implements DataBaseService{
                 incident.setSolutionId(result.getLong("solution_id"));
                 incident.setStatusName(result.getString("status_name"));
                 incident.setSolutionDescription(result.getString("solution_desc"));
+                incident.setCustomerFirstName(result.getString("customer_first_name"));
+                incident.setCustomerMiddleName(result.getString("customer_middle_name"));
+                incident.setCustomerLastName(result.getString("customer_last_name"));
+                incident.setPriorityDescription(result.getString("priority_desc"));
             }
+
+            // get service persons
+            statementServicePersons.setLong(1, id);
+            ResultSet servicePersonsResult = statementServicePersons.executeQuery();
+            //make array of service persons
+
+            // get categories
+
+            // make array of categories
+
             return incident;
         }
         catch (SQLException e){e.printStackTrace();}

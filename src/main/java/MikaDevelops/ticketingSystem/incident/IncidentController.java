@@ -1,6 +1,6 @@
 package MikaDevelops.ticketingSystem.incident;
 
-import MikaDevelops.ticketingSystem.dataRepository.SqliteDatabase;
+import MikaDevelops.ticketingSystem.dataRepository.DataBaseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +12,9 @@ import java.util.List;
 @RequestMapping("/api/v1/incidents")
 public class IncidentController {
 
-    private final SqliteDatabase dataBaseService;
+    private final DataBaseService dataBaseService;
 
-    public IncidentController(SqliteDatabase dataBaseService){
+    public IncidentController(DataBaseService dataBaseService){
         this.dataBaseService = dataBaseService;
     }
 

@@ -14,19 +14,41 @@ public class Incident {
     private long solutionId;
     private String statusName;
     private String solutionDescription;
+    private long incidentServicePersonId;
+    private long categoryId;
+    private String incidentServicePersonName;
+    private String categoryName;
+    private String customerFirstName;
+    private String customerMiddleName;
+    private String customerLastName;
+    private String priorityDescription;
+
+    public long getIncidentServicePersonId() { return incidentServicePersonId; }
+    public void setIncidentServicePersonId(long incidentServicePid) {
+        this.incidentServicePersonId = incidentServicePid;
+    }
+
+    public long getCategoryId() { return categoryId; }
+    public void setCategoryId(long categoryId) { this.categoryId = categoryId; }
+
+    public String getIncidentServicePersonName() { return incidentServicePersonName; }
+    public void setIncidentServicePersonName(String incidentServicePersonName) {
+        this.incidentServicePersonName = incidentServicePersonName;
+    }
+
+    public String getCategoryName() { return categoryName; }
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 
     public long getIncidentId() {
         return incidentId;
     }
-
     public void setIncidentId(long incidentId) {
         this.incidentId = incidentId;
     }
 
-    public long getCreated_datetime() {
+    public long getCreatedDatetime() {
         return createdDatetime;
     }
-
     public void setCreatedDatetime(long created_datetime) {
         this.createdDatetime = created_datetime;
     }
@@ -34,7 +56,6 @@ public class Incident {
     public String getSubject() {
         return subject;
     }
-
     public void setSubject(String subject) {
         this.subject = subject;
     }
@@ -42,7 +63,6 @@ public class Incident {
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -50,7 +70,6 @@ public class Incident {
     public String getNotes() {
         return notes;
     }
-
     public void setNotes(String notes) {
         this.notes = notes;
     }
@@ -58,7 +77,6 @@ public class Incident {
     public String getRelatedIncidentsId() {
         return relatedIncidentsId;
     }
-
     public void setRelatedIncidentsId(String relatedIncidentsId) {
         this.relatedIncidentsId = relatedIncidentsId;
     }
@@ -66,7 +84,6 @@ public class Incident {
     public long getStatusId() {
         return statusId;
     }
-
     public void setStatusId(long statusId) {
         this.statusId = statusId;
     }
@@ -74,7 +91,6 @@ public class Incident {
     public long getCustomerId() {
         return customerId;
     }
-
     public void setCustomerId(long customerId) {
         this.customerId = customerId;
     }
@@ -82,7 +98,6 @@ public class Incident {
     public long getPriorityId() {
         return priorityId;
     }
-
     public void setPriorityId(long priorityId) {
         this.priorityId = priorityId;
     }
@@ -90,14 +105,11 @@ public class Incident {
     public long getSolutionId() {
         return solutionId;
     }
-
     public void setSolutionId(long solutionId) {
         this.solutionId = solutionId;
     }
 
-    public String getStatusName() {
-        return this.statusName;
-    }
+    public String getStatusName() { return this.statusName; }
     public void setStatusName(String statusName) {
         this.statusName = statusName;
     }
@@ -105,26 +117,31 @@ public class Incident {
     public String getSolutionDescription() {
         return this.solutionDescription;
     }
-
     public void setSolutionDescription(String description) {
         this.solutionDescription = description;
     }
 
-    public String getCustomerFirstName() {
-        return "";
+    public String getCustomerFirstName() { return this.customerFirstName; }
+    public void setCustomerFirstName(String customerFirstName) {
+        this.customerFirstName = customerFirstName;
     }
-
     public String getCustomerMiddleName() {
-        return "";
+        return this.customerMiddleName;
     }
-
+    public void setCustomerMiddleName(String customerMiddleName) {
+        this.customerMiddleName = customerMiddleName;
+    }
     public String getCustomerLastName() {
-        return "";
+        return this.customerLastName;
     }
-
+    public void setCustomerLastName(String customerLastName) {
+        this.customerLastName = customerLastName;
+    }
     public String getPriorityDescription() {
-        return "";
+        return this.priorityDescription;
     }
-
+    public void setPriorityDescription(String priorityDescription) {
+        this.priorityDescription = priorityDescription;
+    }
 
 }
