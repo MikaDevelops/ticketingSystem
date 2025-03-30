@@ -2,25 +2,28 @@ package MikaDevelops.ticketingSystem.dataRepository;
 
 import MikaDevelops.ticketingSystem.incident.Incident;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface DataBaseService {
 
-    public void initializeDataBase();
-    public Incident getIncidentById(long id);
-    public List<Incident> getAllIncidents();
+    void initializeDataBase();
+    Incident getIncidentById(long id);
+    List<Incident> getAllIncidents();
 
-    public void saveIncident(Incident incident);
-    public void saveServicePerson();
-    public void saveCategory();
-    public void saveStatus();
-    public void saveCustomer();
-    public void savePriority();
-    public void saveSolution();
+    void saveIncident(Incident incident);
+    void saveServicePerson();
+    void saveCategory();
+    void saveStatus();
+    void saveCustomer();
+    void savePriority();
+    void saveSolution();
 
-    public void setIncidentStatus(long incidentId, long statusId);
-    public void setServicePersonToIncident(long incidentId, long personId);
-    public void setIncidentCategory(long incidentId, long categoryId);
-    public void setIncidentCustomer(long incidentId, long customerId);
-    public void setIncidentPriority(long incidentId, long priorityId);
+    void setIncidentStatus(long incidentId, long statusId);
+    void setServicePersonToIncident(long incidentId, long personId);
+    void setIncidentCategory(long incidentId, long categoryId);
+    void setIncidentCustomer(long incidentId, long customerId);
+    void setIncidentPriority(long incidentId, long priorityId);
+
+    List<String> getServicePersons(long incidentId);
 }

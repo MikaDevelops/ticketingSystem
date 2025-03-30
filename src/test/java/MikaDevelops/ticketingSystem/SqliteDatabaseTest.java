@@ -6,6 +6,8 @@ import MikaDevelops.ticketingSystem.incident.Incident;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class SqliteDatabaseTest {
@@ -60,9 +62,27 @@ class SqliteDatabaseTest {
         assertEquals(customerMiddleName, incident.getCustomerMiddleName());
         assertEquals(customerLastName, incident.getCustomerLastName());
         assertEquals(priorityDesc, incident.getPriorityDescription());
-
-        assertLinesMatch(servicePersons, incident.getServicePersons());
     }
+
+   @Test
+   void shouldReturnServicePersonInformation(){
+        String expectedName = "Patrick Star";
+        long incidentId = 1L;
+        ArrayList<String> receivedNames = (ArrayList<String>) dbService.getServicePersons(incidentId);
+        assertEquals(expectedName, receivedNames.get(0));
+
+        String expectedName1 = "Mr. Krabs";
+        long incidentId1 = 2L;
+        ArrayList<String> receivedNames1 = (ArrayList<String>) dbService.getServicePersons(incidentId1);
+        assertEquals(expectedName1, receivedNames1.get(0));
+
+        int patricIndex = receivedNames1.indexOf("Patrick Star");
+        int krabsIndex = receivedNames1.indexOf("Mr. Krabs");
+        boolean result1 = patricIndex > -1;
+        boolean result2 = krabsIndex > -1;
+        assertTrue(result1);
+        assertTrue(result2);
+   }
 
     @Test
     void shouldRerturnAllIncidents(){

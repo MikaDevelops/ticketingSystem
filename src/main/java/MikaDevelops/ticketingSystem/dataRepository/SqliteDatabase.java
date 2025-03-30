@@ -142,13 +142,6 @@ public class SqliteDatabase implements DataBaseService{
                 LEFT JOIN priority ON incident.priority_id = priority.priority_id
                 WHERE incident_id = ?;
                 """);
-
-                PreparedStatement statementServicePersons = connection.prepareStatement(
-            """
-                SELECT DISTINCT service_person.person_id, service_person.name FROM service_person
-                LEFT JOIN incident_service_person ON incident_service_person.person_id = service_person.person_id
-                WHERE incident_service_person.incident_id = ?;
-                """);
             )
         {
             statement.setLong(1, id);
@@ -175,8 +168,7 @@ public class SqliteDatabase implements DataBaseService{
             }
 
             // get service persons
-            statementServicePersons.setLong(1, id);
-            ResultSet servicePersonsResult = statementServicePersons.executeQuery();
+
             //make array of service persons
 
             // get categories
@@ -188,6 +180,30 @@ public class SqliteDatabase implements DataBaseService{
         catch (SQLException e){e.printStackTrace();}
 
         return null;
+    }
+
+    @Override
+    public List<String> getServicePersons(long incidentId){
+        List<String> servicePersons =  new ArrayList<>();
+        try( Connection connection = this.getConnection(); ){
+
+            PreparedStatement preparedStatement = connection.prepareStatement("""
+                    SELECT service_person.name FROM service_person
+                    LEFT JOIN incident_service_person ON incident_service_person.person_id = service_person.person_id
+                    WHERE incident_service_person.incident_id = ?;
+                    """);
+
+            preparedStatement.setLong(1, incidentId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            connection.commit();
+            while( resultSet.next() ){
+                servicePersons.add(resultSet.getString("name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return servicePersons;
     }
 
     @Override
