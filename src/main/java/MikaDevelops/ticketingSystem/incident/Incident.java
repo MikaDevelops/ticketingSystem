@@ -1,5 +1,7 @@
 package MikaDevelops.ticketingSystem.incident;
 
+import java.util.List;
+
 public class Incident {
 
     private long incidentId;
@@ -14,26 +16,20 @@ public class Incident {
     private long solutionId;
     private String statusName;
     private String solutionDescription;
-    private long incidentServicePersonId;
     private long categoryId;
-    private String incidentServicePersonName;
+    private List<String> incidentServicePersons;
     private String categoryName;
     private String customerFirstName;
     private String customerMiddleName;
     private String customerLastName;
     private String priorityDescription;
 
-    public long getIncidentServicePersonId() { return incidentServicePersonId; }
-    public void setIncidentServicePersonId(long incidentServicePid) {
-        this.incidentServicePersonId = incidentServicePid;
-    }
-
     public long getCategoryId() { return categoryId; }
     public void setCategoryId(long categoryId) { this.categoryId = categoryId; }
 
-    public String getIncidentServicePersonName() { return incidentServicePersonName; }
-    public void setIncidentServicePersonName(String incidentServicePersonName) {
-        this.incidentServicePersonName = incidentServicePersonName;
+    public List<String> getIncidentServicePersons() { return this.incidentServicePersons; }
+    public void setIncidentServicePersons(List<String> incidentServicePersons) {
+        this.incidentServicePersons = incidentServicePersons;
     }
 
     public String getCategoryName() { return categoryName; }

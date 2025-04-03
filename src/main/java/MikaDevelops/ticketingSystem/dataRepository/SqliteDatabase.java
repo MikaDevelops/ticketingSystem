@@ -167,9 +167,8 @@ public class SqliteDatabase implements DataBaseService{
                 incident.setPriorityDescription(result.getString("priority_desc"));
             }
 
-            // get service persons
-
-            //make array of service persons
+            List<String> incidentServicePersons = this.getServicePersons(id);
+            incident.setIncidentServicePersons(incidentServicePersons);
 
             // get categories
 

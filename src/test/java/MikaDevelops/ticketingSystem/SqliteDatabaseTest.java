@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,6 +44,9 @@ class SqliteDatabaseTest {
         long categoryId         = 1L;
         String incidentServicePersonName = "Patrick Star";
         String categoryName     = "Workstation";
+        List<String> servicePersons = new ArrayList<String>();
+        servicePersons.add("Patrick Star");
+        servicePersons.add("Mr. Krabs");
 
         Incident incident = dbService.getIncidentById(incidentId);
 
@@ -62,6 +66,7 @@ class SqliteDatabaseTest {
         assertEquals(customerMiddleName, incident.getCustomerMiddleName());
         assertEquals(customerLastName, incident.getCustomerLastName());
         assertEquals(priorityDesc, incident.getPriorityDescription());
+        assertInstanceOf(List.class, incident.getIncidentServicePersons());
     }
 
    @Test
@@ -82,6 +87,11 @@ class SqliteDatabaseTest {
         boolean result2 = krabsIndex > -1;
         assertTrue(result1);
         assertTrue(result2);
+   }
+
+   @Test
+   void shouldReturnEmptyServicePersonListWhenNoneAssigned(){
+
    }
 
     @Test
