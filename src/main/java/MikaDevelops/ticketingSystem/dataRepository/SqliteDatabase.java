@@ -278,7 +278,8 @@ public class SqliteDatabase implements DataBaseService{
 
     }
 
-    private Connection getConnection(){
+    @Override
+    public Connection getConnection(){
         Connection connection;
         String baseAddress = this.getBaseAddress();
         try{

@@ -16,7 +16,7 @@ public class Incident {
     private long solutionId;
     private String statusName;
     private String solutionDescription;
-    private long categoryId;
+    private long categoryNames;
     private List<String> incidentServicePersons;
     private String categoryName;
     private String customerFirstName;
@@ -24,8 +24,8 @@ public class Incident {
     private String customerLastName;
     private String priorityDescription;
 
-    public long getCategoryId() { return categoryId; }
-    public void setCategoryId(long categoryId) { this.categoryId = categoryId; }
+    public long getCategoryNames() { return categoryNames; }
+    public void setCategoryNames(long categoryNames) { this.categoryNames = categoryNames; }
 
     public List<String> getIncidentServicePersons() { return this.incidentServicePersons; }
     public void setIncidentServicePersons(List<String> incidentServicePersons) {

@@ -3,7 +3,9 @@ package MikaDevelops.ticketingSystem;
 import MikaDevelops.ticketingSystem.dataRepository.DataBaseService;
 import MikaDevelops.ticketingSystem.dataRepository.SqliteDatabase;
 import MikaDevelops.ticketingSystem.incident.Incident;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -18,6 +20,16 @@ class SqliteDatabaseTest {
     @BeforeAll
     static void setUp() {
         dbService = new SqliteDatabase("testing.db");
+    }
+
+    @BeforeEach
+    void testSetup() {
+
+    }
+
+    @AfterEach
+    void testTearDown(){
+
     }
 
     @Test

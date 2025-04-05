@@ -2,12 +2,24 @@ package MikaDevelops.ticketingSystem.dataRepository;
 
 import MikaDevelops.ticketingSystem.incident.Incident;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 public interface DataBaseService {
 
     void initializeDataBase();
+
+    /**
+     * Meant for testing purposes or for special cases.
+     * <p>
+     * Remember to close connection after use. Remember also that
+     * most likely your case ain't that special.
+     *
+     * @return Connection to database
+     */
+    Connection getConnection();
+
     Incident getIncidentById(long id);
     List<Incident> getAllIncidents();
 
