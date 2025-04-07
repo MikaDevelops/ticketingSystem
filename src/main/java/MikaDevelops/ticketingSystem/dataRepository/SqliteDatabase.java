@@ -20,8 +20,9 @@ public class SqliteDatabase implements DataBaseService{
 
     @Override
     public void initializeDataBase() {
-        Connection connection = this.getConnection();
+
         try (
+                Connection connection = this.getConnection();
                 Statement statement = connection.createStatement()
         ) {
 
@@ -116,7 +117,6 @@ public class SqliteDatabase implements DataBaseService{
                     """);
 
             connection.commit();
-            connection.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -125,8 +125,9 @@ public class SqliteDatabase implements DataBaseService{
 
     @Override
     public Incident getIncidentById(long id) {
-        Connection connection = this.getConnection();
+
         try (
+                Connection connection = this.getConnection();
                 PreparedStatement statement = connection.prepareStatement("""
                 SELECT
                 incident.incident_id, incident.created_datetime, incident.subject, incident.description AS incident_desc,
