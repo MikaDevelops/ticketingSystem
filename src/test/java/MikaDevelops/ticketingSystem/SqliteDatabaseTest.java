@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.io.File;
+import java.sql.Connection;
 import java.sql.SQLOutput;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -28,19 +29,14 @@ class SqliteDatabaseTest {
     @BeforeEach
     void testSetup() {
         dbService = new SqliteDatabase("testing.db");
+        Connection connection = dbService.getConnection();
+        this.insertTestCases(connection);
     }
 
     @AfterEach
     void testTearDown(){
 
-        LocalDateTime dateTime = LocalDateTime.now();
-        String timestamp = String.valueOf(dateTime.getYear())+"-"
-                +String.valueOf(dateTime.getMonthValue())+"-"
-                +String.valueOf(dateTime.getDayOfMonth())+"-"
-                +String.valueOf(dateTime.getHour())
-                +String.valueOf(dateTime.getMinute())
-                +String.valueOf(dateTime.getSecond())
-                +String.valueOf(dateTime.getNano());
+        String timestamp = this.timestamp();
 
         File file = new File("data/testing.db");
         
@@ -49,6 +45,7 @@ class SqliteDatabaseTest {
         }else{
             System.out.println("renaming db file not succeeded");
         }
+        
         dbService = null;
     }
 
@@ -131,5 +128,21 @@ class SqliteDatabaseTest {
     @Test
     void shouldRerturnAllIncidents(){
         testName = "shouldRerturnAllIncidents";
+    }
+
+    void insertTestCases(Connection connection){
+
+    }
+
+    String timestamp(){
+        LocalDateTime dateTime = LocalDateTime.now();
+        String timestamp = String.valueOf(dateTime.getYear())+"-"
+                +String.valueOf(dateTime.getMonthValue())+"-"
+                +String.valueOf(dateTime.getDayOfMonth())+"-"
+                +String.valueOf(dateTime.getHour())
+                +String.valueOf(dateTime.getMinute())
+                +String.valueOf(dateTime.getSecond())
+                +String.valueOf(dateTime.getNano());
+        return timestamp;
     }
 }
