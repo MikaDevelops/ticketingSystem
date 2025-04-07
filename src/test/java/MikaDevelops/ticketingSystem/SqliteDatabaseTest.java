@@ -45,7 +45,7 @@ class SqliteDatabaseTest {
         }else{
             System.out.println("renaming db file not succeeded");
         }
-        
+
         dbService = null;
     }
 
@@ -131,6 +131,22 @@ class SqliteDatabaseTest {
     }
 
     void insertTestCases(Connection connection){
+        String[] inserts = {
+                "INSERT INTO status(name) values ('new'),('under work'),('waiting'),('closed');",
+                "INSERT INTO customer(first_name, middle_name, last_name) values ('John', 'Milton','Holmes'),('Michelle','Eleanore','Pfiifferi'),('Spongebob','','Squarepants');",
+                "INSERT INTO priority(description) values ('normal'),('high'),('low');",
+                "INSERT INTO service_person(name) values ('Patrick Star'),('Mr. Krabs'),('Squidward Tentacles');",
+                "INSERT INTO category(name) values ('Workstation'),('Server'),('Deep fryer'),('Plankton');",
+                "INSERT INTO solution(description) values ('Coffee on keyboard dryed using hairdryer.'),('Powercord plugged to wall outlet'),('Year old fries removed.'),('Used magic.');",
+                "INSERT INTO incident(created_datetime, subject, description, notes, related_incidents, status_id, customer_id, priority_id) values"
+                    +"(15120, 'test subjec44', 'test description4444', 'test notee33s', '1,2,3,4',1,1,1),"
+                    +"(15120, 'test subject442', 'test description442', 'test note33s2', '2,3',2,2,2),"
+                    +"(15120, 'test subject443', 'test description443', 'test not33es3', '3',3,2,3),"
+                    +"(15120, 'test subject444', 'test description444', 'test not33es4', '1',2,1,3);",
+                "INSERT INTO incident_service_person(person_id, incident_id) VALUES (1,1), (2,2), (1,2);"
+        };
+
+        //TODO: iterate through inserts
 
     }
 
