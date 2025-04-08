@@ -51,7 +51,7 @@ public class Incident {
     private String customerLastName;
     private String priorityDescription;
 
-    public List<String> getCategoryNames() { return categoryNames; }
+    public List<String> getCategoryNames() { return this.categoryNames; }
     public void setCategoryNames(List<String> categoryNames) { this.categoryNames = categoryNames; }
 
     public List<String> getIncidentServicePersons() { return this.incidentServicePersons; }
