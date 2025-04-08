@@ -75,7 +75,7 @@ class SqliteDatabaseTest {
         long categoryId         = 1L;
         String incidentServicePersonName = "Patrick Star";
         String categoryName     = "Workstation";
-        List<String> servicePersons = new ArrayList<String>();
+        List<String> servicePersons = new ArrayList<>();
         servicePersons.add("Patrick Star");
         servicePersons.add("Mr. Krabs");
 
@@ -158,6 +158,12 @@ class SqliteDatabaseTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    Incident[] expectedIncidents(){
+        return new Incident[]{
+
+        };
     }
 
     String timestamp(){

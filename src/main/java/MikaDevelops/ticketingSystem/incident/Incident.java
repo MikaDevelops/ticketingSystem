@@ -4,6 +4,35 @@ import java.util.List;
 
 public class Incident {
 
+    public Incident() {}
+    public Incident(long incidentId, long createdDatetime, String subject, String description,
+                    String notes, String relatedIncidentsId, long statusId, long customerId,
+                    long priorityId, long solutionId, String statusName, String solutionDescription,
+                    long categoryNames, List<String> incidentServicePersons, String categoryName,
+                    String customerFirstName, String customerMiddleName, String customerLastName,
+                    String priorityDescription)
+    {
+        this.incidentId = incidentId;
+        this.createdDatetime = createdDatetime;
+        this.subject = subject;
+        this.description = description;
+        this.notes = notes;
+        this.relatedIncidentsId = relatedIncidentsId;
+        this.statusId = statusId;
+        this.customerId = customerId;
+        this.priorityId = priorityId;
+        this.solutionId = solutionId;
+        this.statusName = statusName;
+        this.solutionDescription = solutionDescription;
+        this.categoryNames = categoryNames;
+        this.incidentServicePersons = incidentServicePersons;
+        this.categoryName = categoryName;
+        this.customerFirstName = customerFirstName;
+        this.customerMiddleName = customerMiddleName;
+        this.customerLastName = customerLastName;
+        this.priorityDescription = priorityDescription;
+    }
+
     private long incidentId;
     private long createdDatetime;
     private String subject;
@@ -121,18 +150,21 @@ public class Incident {
     public void setCustomerFirstName(String customerFirstName) {
         this.customerFirstName = customerFirstName;
     }
+
     public String getCustomerMiddleName() {
         return this.customerMiddleName;
     }
     public void setCustomerMiddleName(String customerMiddleName) {
         this.customerMiddleName = customerMiddleName;
     }
+
     public String getCustomerLastName() {
         return this.customerLastName;
     }
     public void setCustomerLastName(String customerLastName) {
         this.customerLastName = customerLastName;
     }
+    
     public String getPriorityDescription() {
         return this.priorityDescription;
     }
