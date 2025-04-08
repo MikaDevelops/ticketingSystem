@@ -148,7 +148,6 @@ class SqliteDatabaseTest {
                 "INSERT INTO incident_service_person(person_id, incident_id) VALUES (1,1), (2,2), (1,2);"
         };
 
-        //TODO: iterate through inserts
         try (Statement statement = connection.createStatement()) {
             for (int i = 0; i < inserts.length; i++){
                 statement.execute(inserts[i]);
