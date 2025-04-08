@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -160,8 +161,30 @@ class SqliteDatabaseTest {
     }
 
     Incident[] expectedIncidents(){
+
+        String[] categoryNames = {"Workstation"};
+        ArrayList<String> categoryArray = new ArrayList<>(Arrays.asList(categoryNames));
+
+        String[] servicePersonNames = {"Patric Star"};
+        ArrayList<String> servicePersonsArray = new ArrayList<>(Arrays.asList(servicePersonNames));
+
         return new Incident[]{
 
+            new Incident(
+                    1L,
+                    15120,
+                    "test subject",
+                    "test description",
+                    "test notes",
+                    "1,2,3,4",
+                    1L, 1L, 1L, 1L,
+                    "new",
+                    "Coffee on keyboard dryed using hairdryer.",
+                    categoryArray,
+                    servicePersonsArray,
+                    "John","Milton","Holmes",
+                    "normal"
+            )
         };
     }
 
