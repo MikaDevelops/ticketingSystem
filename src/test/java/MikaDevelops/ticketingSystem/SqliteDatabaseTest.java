@@ -56,12 +56,8 @@ class SqliteDatabaseTest {
     @Test
     void getIncidentById() {
         testName = "getIncidentById";
-        // Expected values
-        long incidentId         = this.expectedIncidents[0].getIncidentId();
 
-        List<String> servicePersons = new ArrayList<>();
-        servicePersons.add("Patrick Star");
-        servicePersons.add("Mr. Krabs");
+        long incidentId = this.expectedIncidents[0].getIncidentId();
 
         Incident incident = dbService.getIncidentById(incidentId);
 
