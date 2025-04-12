@@ -171,9 +171,8 @@ public class SqliteDatabase implements DataBaseService{
             List<String> incidentServicePersons = this.getServicePersons(id);
             incident.setIncidentServicePersons(incidentServicePersons);
 
-            // get categories
-
-            // make array of categories
+            List<String> incidentCategories = this.getCategoriesByIncidentId(id);
+            incident.setCategoryNames(incidentCategories);
 
             return incident;
         }
@@ -293,6 +292,32 @@ public class SqliteDatabase implements DataBaseService{
         }
         connection = null;
         return connection;
+    }
+
+    private ArrayList<String> getCategoriesByIncidentId(long incidentId){
+
+        ArrayList<String> categories = new ArrayList<>();
+
+        try(Connection connection = this.getConnection();){
+
+            PreparedStatement statement = connection.prepareStatement("""
+                    SELECT category.name FROM category
+                    LEFT JOIN incident_category ON incident_category.category_id = category.category_id
+                    WHERE incident_category.incident_id = ?;
+                    """);
+
+            statement.setLong(1, incidentId);
+            ResultSet results = statement.executeQuery();
+            while(results.next()){
+                categories.add( results.getString("name") );
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return categories;
+
     }
 
     private String getBaseAddress(){

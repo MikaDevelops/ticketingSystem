@@ -4,17 +4,11 @@ import MikaDevelops.ticketingSystem.dataRepository.DataBaseService;
 import MikaDevelops.ticketingSystem.dataRepository.SqliteDatabase;
 import MikaDevelops.ticketingSystem.incident.Incident;
 import net.bytebuddy.asm.Advice;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.SQLOutput;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -79,7 +73,6 @@ class SqliteDatabaseTest {
         assertEquals(this.expectedIncidents[0].getPriorityDescription(), incident.getPriorityDescription());
         assertInstanceOf(List.class, incident.getIncidentServicePersons());
         assertArrayEquals(this.expectedIncidents[0].getIncidentServicePersons().toArray(), incident.getIncidentServicePersons().toArray());
-        assertArrayEquals(this.expectedIncidents[0].getCategoryNames().toArray(), incident.getCategoryNames().toArray());
     }
 
    @Test
@@ -110,8 +103,35 @@ class SqliteDatabaseTest {
    }
 
     @Test
-    void shouldRerturnAllIncidents(){
-        testName = "shouldRerturnAllIncidents";
+    void shouldHaveSingleCategoryName(){
+        testName = "shouldHaveSingleCategoryName";
+
+        Incident[] expectedIncidents = this.expectedIncidents();
+        Incident expectedIncident = expectedIncidents[0];
+
+        Incident resultIncident = dbService.getIncidentById(1L);
+
+        assertArrayEquals(expectedIncident.getCategoryNames().toArray(), resultIncident.getCategoryNames().toArray());
+    }
+
+    @Test
+    void shouldHaveTwoCategoryNames(){
+        testName = "shouldHaveTwoCategoryNames";
+
+        Incident[] expectedIncidents = this.expectedIncidents();
+        Incident expectedIncident = expectedIncidents[1];
+
+        Incident resultIncident = dbService.getIncidentById(2L);
+        ArrayList<String> resultCategories = (ArrayList<String>) resultIncident.getCategoryNames();
+
+        assertEquals(2, resultCategories.size());
+        assertArrayEquals(expectedIncident.getCategoryNames().toArray(), resultIncident.getCategoryNames().toArray());
+    }
+
+    @Disabled
+    @Test
+    void shouldReturnAllIncidents(){
+        testName = "shouldReturnAllIncidents";
     }
 
     void insertTestCases(Connection connection){
@@ -127,7 +147,8 @@ class SqliteDatabaseTest {
                     +"(15121, 'test subject442', 'test description442', 'test note33s2', '2,3',2,2,2,2),"
                     +"(15122, 'test subject443', 'test description443', 'test not33es3', '3',3,2,3,3),"
                     +"(15123, 'test subject444', 'test description444', 'test not33es4', '1',2,1,3,4);",
-                "INSERT INTO incident_service_person(person_id, incident_id) VALUES (1,1), (2,2), (1,2);"
+                "INSERT INTO incident_service_person(person_id, incident_id) VALUES (1,1), (2,2), (1,2);",
+                "INSERT INTO incident_category(category_id, incident_id) VALUES (1,1), (2,2), (3,2);"
         };
 
         try (Statement statement = connection.createStatement()) {
@@ -143,11 +164,17 @@ class SqliteDatabaseTest {
 
     Incident[] expectedIncidents(){
 
-        String[] categoryNames = {"Workstation"};
-        ArrayList<String> categoryArray = new ArrayList<>(Arrays.asList(categoryNames));
+        String[] testCase1_categoryNames = {"Workstation"};
+        ArrayList<String> testCase1_categoryArray = new ArrayList<>(Arrays.asList(testCase1_categoryNames));
 
-        String[] servicePersonNames = {"Patrick Star"};
-        ArrayList<String> servicePersonsArray = new ArrayList<>(Arrays.asList(servicePersonNames));
+        String[] testCase1_servicePersonNames = {"Patrick Star"};
+        ArrayList<String> testCase1_servicePersonsArray = new ArrayList<>(Arrays.asList(testCase1_servicePersonNames));
+
+        String[] testCase2_categoryNames = {"Server", "Deep fryer"};
+        ArrayList<String> testCase2_categoryArray = new ArrayList<>(Arrays.asList(testCase2_categoryNames));
+
+        String[] testCase2_servicePersonNames = {"Patrick Star", "Mr. Krabs"};
+        ArrayList<String> testCase2_servicePersonsArray = new ArrayList<>(Arrays.asList(testCase2_servicePersonNames));
 
         return new Incident[]{
 
@@ -161,12 +188,28 @@ class SqliteDatabaseTest {
                     1L, 1L, 1L, 1L,
                     "new",
                     "Coffee on keyboard dryed using hairdryer.",
-                    categoryArray,
-                    servicePersonsArray,
+                    testCase1_categoryArray,
+                    testCase1_servicePersonsArray,
                     "John","Milton","Holmes",
                     "normal"
+            ),
+
+            new Incident(
+                    2L,
+                    15121,
+                    "test subject442",
+                    "test description442",
+                    "test note33s2",
+                    "2, 3",
+                    2L, 2L, 2L, 2L,
+                    "under work",
+                    "Powercord plugged to wall outlet",
+                    testCase2_categoryArray,
+                    testCase2_servicePersonsArray,
+                    "Michelle","Eleanore","Pfiifferi",
+                    "high"
             )
-        };
+        }; //
     }
 
     String timestamp(){
