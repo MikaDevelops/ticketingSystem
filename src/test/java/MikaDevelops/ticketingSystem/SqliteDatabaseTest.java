@@ -164,8 +164,8 @@ class SqliteDatabaseTest {
                     +"(15121, 'test subject442', 'test description442', 'test note33s2', '2,3',2,2,2,2),"
                     +"(15122, 'test subject443', 'test description443', 'test not33es3', '3',3,2,3,3),"
                     +"(15123, 'test subject444', 'test description444', 'test not33es4', '1',2,1,3,4);",
-                "INSERT INTO incident_service_person(person_id, incident_id) VALUES (1,1), (2,2), (1,2);",
-                "INSERT INTO incident_category(category_id, incident_id) VALUES (1,1), (2,2), (3,2);"
+                "INSERT INTO incident_service_person(person_id, incident_id) VALUES (1,1), (2,2), (1,2), (3,4);",
+                "INSERT INTO incident_category(category_id, incident_id) VALUES (1,1), (2,2), (3,2), (4,4);"
         };
 
         try (Statement statement = connection.createStatement()) {
@@ -196,8 +196,14 @@ class SqliteDatabaseTest {
         String[] testCase3_categoryNames = new String[]{};
         ArrayList<String> testCase3_categoryArray = new ArrayList<>(Arrays.asList(testCase3_categoryNames));
 
-        String[] testCase3_servicePersonNames = {"Patrick Star", "Mr. Krabs"};
+        String[] testCase3_servicePersonNames = new String[]{};
         ArrayList<String> testCase3_servicePersonsArray = new ArrayList<>(Arrays.asList(testCase3_servicePersonNames));
+
+        String[] testCase4_categoryNames = new String[]{};
+        ArrayList<String> testCase4_categoryArray = new ArrayList<>(Arrays.asList(testCase4_categoryNames));
+
+        String[] testCase4_servicePersonNames = new String[]{};
+        ArrayList<String> testCase4_servicePersonsArray = new ArrayList<>(Arrays.asList(testCase4_servicePersonNames));
 
         return new Incident[]{
 
@@ -235,7 +241,7 @@ class SqliteDatabaseTest {
 
             new Incident(
                     3L,
-                    15121,
+                    15122,
                     "test subject443",
                     "test description443",
                     "test not33es3",
@@ -245,6 +251,22 @@ class SqliteDatabaseTest {
                     "Powercord plugged to wall outlet",
                     testCase3_categoryArray,
                     testCase3_servicePersonsArray,
+                    "Michelle","Eleanore","Pfiifferi",
+                    "low"
+            ),
+
+            new Incident(
+                    4L,
+                    15123,
+                    "test subject444",
+                    "test description444",
+                    "test not33es4",
+                    "1",
+                    2L, 1L, 3L, 4L,
+                    "under work",
+                    "Used magic.",
+                    testCase4_categoryArray,
+                    testCase4_servicePersonsArray,
                     "Michelle","Eleanore","Pfiifferi",
                     "low"
             )
