@@ -97,9 +97,12 @@ class SqliteDatabaseTest {
         assertTrue(result2);
    }
 
+   @Disabled
    @Test
    void shouldReturnEmptyServicePersonListWhenNoneAssigned(){
        testName = "shouldReturnEmptyServicePersonListWhenNoneAssigned";
+
+
    }
 
     @Test
@@ -125,6 +128,20 @@ class SqliteDatabaseTest {
         ArrayList<String> resultCategories = (ArrayList<String>) resultIncident.getCategoryNames();
 
         assertEquals(2, resultCategories.size());
+        assertArrayEquals(expectedIncident.getCategoryNames().toArray(), resultIncident.getCategoryNames().toArray());
+    }
+
+    @Test
+    void shouldHaveEmptyCategoryNames(){
+        testName = "shouldHaveEmptyCategoryNames";
+
+        Incident[] expectedIncidents = this.expectedIncidents();
+        Incident expectedIncident = expectedIncidents[2];
+
+        Incident resultIncident = dbService.getIncidentById(3L);
+        ArrayList<String> resultCategories = (ArrayList<String>) resultIncident.getCategoryNames();
+
+        assertEquals(0, resultCategories.size());
         assertArrayEquals(expectedIncident.getCategoryNames().toArray(), resultIncident.getCategoryNames().toArray());
     }
 
@@ -176,6 +193,12 @@ class SqliteDatabaseTest {
         String[] testCase2_servicePersonNames = {"Patrick Star", "Mr. Krabs"};
         ArrayList<String> testCase2_servicePersonsArray = new ArrayList<>(Arrays.asList(testCase2_servicePersonNames));
 
+        String[] testCase3_categoryNames = new String[]{};
+        ArrayList<String> testCase3_categoryArray = new ArrayList<>(Arrays.asList(testCase3_categoryNames));
+
+        String[] testCase3_servicePersonNames = {"Patrick Star", "Mr. Krabs"};
+        ArrayList<String> testCase3_servicePersonsArray = new ArrayList<>(Arrays.asList(testCase3_servicePersonNames));
+
         return new Incident[]{
 
             new Incident(
@@ -208,8 +231,24 @@ class SqliteDatabaseTest {
                     testCase2_servicePersonsArray,
                     "Michelle","Eleanore","Pfiifferi",
                     "high"
+            ),
+
+            new Incident(
+                    3L,
+                    15121,
+                    "test subject443",
+                    "test description443",
+                    "test not33es3",
+                    "3",
+                    3L, 2L, 3L, 3L,
+                    "waiting",
+                    "Powercord plugged to wall outlet",
+                    testCase3_categoryArray,
+                    testCase3_servicePersonsArray,
+                    "Michelle","Eleanore","Pfiifferi",
+                    "low"
             )
-        }; //
+        };
     }
 
     String timestamp(){
