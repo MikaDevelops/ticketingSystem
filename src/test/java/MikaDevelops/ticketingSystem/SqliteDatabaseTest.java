@@ -97,13 +97,17 @@ class SqliteDatabaseTest {
         assertTrue(result2);
    }
 
-   @Disabled
    @Test
    void shouldReturnEmptyServicePersonListWhenNoneAssigned(){
        testName = "shouldReturnEmptyServicePersonListWhenNoneAssigned";
 
+       Incident expectedIncident = expectedIncidents[2];
+       ArrayList<String> expectedServicePersons = (ArrayList<String>) expectedIncident.getIncidentServicePersons();
 
-   }
+       Incident resultIncident = (Incident) dbService.getIncidentById(expectedIncident.getIncidentId());
+
+       assertArrayEquals(expectedServicePersons.toArray(), resultIncident.getIncidentServicePersons().toArray());
+    }
 
     @Test
     void shouldHaveSingleCategoryName(){
@@ -145,10 +149,13 @@ class SqliteDatabaseTest {
         assertArrayEquals(expectedIncident.getCategoryNames().toArray(), resultIncident.getCategoryNames().toArray());
     }
 
-    @Disabled
     @Test
     void shouldReturnAllIncidents(){
         testName = "shouldReturnAllIncidents";
+
+        List<Incident> results = dbService.getAllIncidents();
+
+        assertInstanceOf(List.class, results);
     }
 
     void insertTestCases(Connection connection){
