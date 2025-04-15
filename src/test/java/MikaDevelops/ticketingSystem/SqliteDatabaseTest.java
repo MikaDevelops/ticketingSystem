@@ -156,6 +156,28 @@ class SqliteDatabaseTest {
         List<Incident> results = dbService.getAllIncidents();
 
         assertInstanceOf(List.class, results);
+        assertEquals(expectedIncidents.length, results.size());
+        for (int i = 0; i < expectedIncidents.length; i++){
+            System.out.println("index " + i);
+            assertEquals(expectedIncidents[i].getIncidentId(), results.get(i).getIncidentId());
+            assertEquals(expectedIncidents[i].getRelatedIncidentsId(), results.get(i).getRelatedIncidentsId());
+            assertEquals(expectedIncidents[i].getPriorityDescription(), results.get(i).getPriorityDescription());
+            assertEquals(expectedIncidents[i].getCustomerMiddleName(), results.get(i).getCustomerMiddleName());
+            assertEquals(expectedIncidents[i].getCustomerFirstName(), results.get(i).getCustomerFirstName());
+            assertEquals(expectedIncidents[i].getCustomerLastName(), results.get(i).getCustomerLastName());
+            assertEquals(expectedIncidents[i].getSolutionId(), results.get(i).getSolutionId());
+            assertEquals(expectedIncidents[i].getSolutionDescription(), results.get(i).getSolutionDescription());
+            assertEquals(expectedIncidents[i].getNotes(), results.get(i).getNotes());
+            assertEquals(expectedIncidents[i].getStatusName(), results.get(i).getStatusName());
+            assertEquals(expectedIncidents[i].getCustomerId(), results.get(i).getCustomerId());
+            assertArrayEquals(expectedIncidents[i].getIncidentServicePersons().toArray(), results.get(i).getIncidentServicePersons().toArray());
+            assertLinesMatch(expectedIncidents[i].getCategoryNames(), results.get(i).getCategoryNames());
+            assertEquals(expectedIncidents[i].getCreatedDatetime(), results.get(i).getCreatedDatetime());
+            assertEquals(expectedIncidents[i].getSubject(), results.get(i).getSubject());
+            assertEquals(expectedIncidents[i].getPriorityId(), results.get(i).getPriorityId());
+            assertEquals(expectedIncidents[i].getStatusId(), results.get(i).getStatusId());
+            assertEquals(expectedIncidents[i].getDescription(), results.get(i).getDescription());
+        }
     }
 
     void insertTestCases(Connection connection){
@@ -197,7 +219,7 @@ class SqliteDatabaseTest {
         String[] testCase2_categoryNames = {"Server", "Deep fryer"};
         ArrayList<String> testCase2_categoryArray = new ArrayList<>(Arrays.asList(testCase2_categoryNames));
 
-        String[] testCase2_servicePersonNames = {"Patrick Star", "Mr. Krabs"};
+        String[] testCase2_servicePersonNames = {"Mr. Krabs", "Patrick Star"};
         ArrayList<String> testCase2_servicePersonsArray = new ArrayList<>(Arrays.asList(testCase2_servicePersonNames));
 
         String[] testCase3_categoryNames = new String[]{};
@@ -236,7 +258,7 @@ class SqliteDatabaseTest {
                     "test subject442",
                     "test description442",
                     "test note33s2",
-                    "2, 3",
+                    "2,3",
                     2L, 2L, 2L, 2L,
                     "under work",
                     "Powercord plugged to wall outlet",

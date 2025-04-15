@@ -208,9 +208,25 @@ public class SqliteDatabase implements DataBaseService{
     @Override
     public List<Incident> getAllIncidents(){
         try( Connection connection = this.getConnection(); ){
+
             //TODO: should return all incidents
             String sqlString = "SELECT created_datetime";
-            return null;
+
+            Incident in1 = this.getIncidentById(1L);
+            Incident in2 = this.getIncidentById(2L);
+            Incident in3 = this.getIncidentById(3L);
+            Incident in4 = this.getIncidentById(4L);
+
+            Incident[] incidents = {
+                    in1,
+                    in2,
+                    in3,
+                    in4
+            };
+
+
+            return List.of(incidents);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
