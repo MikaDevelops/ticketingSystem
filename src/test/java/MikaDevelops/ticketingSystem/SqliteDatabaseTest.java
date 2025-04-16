@@ -158,7 +158,7 @@ class SqliteDatabaseTest {
         assertInstanceOf(List.class, results);
         assertEquals(expectedIncidents.length, results.size());
         for (int i = 0; i < expectedIncidents.length; i++){
-            assertEquals(expectedIncidents[i].getIncidentId(), results.get(i).getIncidentId()+1, "Incident Id on case: "+i);
+            assertEquals(expectedIncidents[i].getIncidentId(), results.get(i).getIncidentId(), "Incident Id on case: "+i);
             assertEquals(expectedIncidents[i].getRelatedIncidentsId(), results.get(i).getRelatedIncidentsId(), "Related incidents Id on case: "+i);
             assertEquals(expectedIncidents[i].getPriorityDescription(), results.get(i).getPriorityDescription(), "Priority desc Id on case: "+i);
             assertEquals(expectedIncidents[i].getCustomerMiddleName(), results.get(i).getCustomerMiddleName(), "Customer middle name Id on case: "+i);

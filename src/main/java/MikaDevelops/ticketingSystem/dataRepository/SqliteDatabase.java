@@ -4,8 +4,10 @@ import MikaDevelops.ticketingSystem.incident.Incident;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Repository
@@ -210,7 +212,51 @@ public class SqliteDatabase implements DataBaseService{
         try( Connection connection = this.getConnection(); ){
 
             //TODO: should return all incidents
-            String sqlString = "SELECT created_datetime";
+            String sqlString = """
+                    SELECT DISTINCT
+                    incident.incident_id, incident.created_datetime,incident.subject,
+                    incident.description, incident.notes, incident.related_incidents, incident.status_id,
+                    incident.customer_id, incident.priority_id, incident.solution_id,
+                    service_person.name AS service_person_name,
+                    category.name AS category_name,
+                    status.name AS status_name,
+                    customer.first_name AS customer_first_name,
+                    customer.middle_name AS customer_middle_name,
+                    customer.last_name AS customer_last_name,
+                    priority.description AS priority_description,
+                    solution.description AS solution_description
+                    FROM incident
+                    LEFT JOIN incident_service_person ON incident.incident_id = incident_service_person.incident_id
+                    LEFT JOIN incident_category ON incident.incident_id = incident_category.incident_id
+                    LEFT JOIN service_person ON service_person.person_id = incident_service_person.person_id
+                    LEFT JOIN category ON category.category_id = incident_category.category_id
+                    LEFT JOIN status ON status.status_id = incident.status_id
+                    LEFT JOIN customer ON customer.customer_id = incident.customer_id
+                    LEFT JOIN priority ON priority.priority_id = incident.priority_id
+                    LEFT JOIN solution ON solution.solution_id = incident.solution_id;
+                    """;
+
+            Statement statement = connection.createStatement();
+            ResultSet results = statement.executeQuery(sqlString);
+
+            HashMap<Long,Incident> incidentsHashMap = new HashMap<>();
+            while (results.next()){
+                long incidentId = results.getLong("incident_id");
+                if(incidentsHashMap.containsKey(incidentId)){
+                    System.out.println("double");
+                }
+                else{
+                    Incident incident = new Incident();
+                    incident.setIncidentId(incidentId);
+                    incident.setCreatedDatetime(results.getLong("created_datetime"));
+                    incident.setSubject(results.getString("subject"));
+                    incident.setDescription(results.getString("description"));
+                    incident.setNotes(results.getString("notes"));
+
+                    incidentsHashMap.put(incidentId, incident);
+                }
+
+            }
 
             Incident in1 = this.getIncidentById(1L);
             Incident in2 = this.getIncidentById(2L);
