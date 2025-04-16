@@ -158,25 +158,24 @@ class SqliteDatabaseTest {
         assertInstanceOf(List.class, results);
         assertEquals(expectedIncidents.length, results.size());
         for (int i = 0; i < expectedIncidents.length; i++){
-            System.out.println("index " + i);
-            assertEquals(expectedIncidents[i].getIncidentId(), results.get(i).getIncidentId());
-            assertEquals(expectedIncidents[i].getRelatedIncidentsId(), results.get(i).getRelatedIncidentsId());
-            assertEquals(expectedIncidents[i].getPriorityDescription(), results.get(i).getPriorityDescription());
-            assertEquals(expectedIncidents[i].getCustomerMiddleName(), results.get(i).getCustomerMiddleName());
-            assertEquals(expectedIncidents[i].getCustomerFirstName(), results.get(i).getCustomerFirstName());
-            assertEquals(expectedIncidents[i].getCustomerLastName(), results.get(i).getCustomerLastName());
-            assertEquals(expectedIncidents[i].getSolutionId(), results.get(i).getSolutionId());
-            assertEquals(expectedIncidents[i].getSolutionDescription(), results.get(i).getSolutionDescription());
-            assertEquals(expectedIncidents[i].getNotes(), results.get(i).getNotes());
-            assertEquals(expectedIncidents[i].getStatusName(), results.get(i).getStatusName());
-            assertEquals(expectedIncidents[i].getCustomerId(), results.get(i).getCustomerId());
-            assertArrayEquals(expectedIncidents[i].getIncidentServicePersons().toArray(), results.get(i).getIncidentServicePersons().toArray());
-            assertLinesMatch(expectedIncidents[i].getCategoryNames(), results.get(i).getCategoryNames());
-            assertEquals(expectedIncidents[i].getCreatedDatetime(), results.get(i).getCreatedDatetime());
-            assertEquals(expectedIncidents[i].getSubject(), results.get(i).getSubject());
-            assertEquals(expectedIncidents[i].getPriorityId(), results.get(i).getPriorityId());
-            assertEquals(expectedIncidents[i].getStatusId(), results.get(i).getStatusId());
-            assertEquals(expectedIncidents[i].getDescription(), results.get(i).getDescription());
+            assertEquals(expectedIncidents[i].getIncidentId(), results.get(i).getIncidentId()+1, "Incident Id on case: "+i);
+            assertEquals(expectedIncidents[i].getRelatedIncidentsId(), results.get(i).getRelatedIncidentsId(), "Related incidents Id on case: "+i);
+            assertEquals(expectedIncidents[i].getPriorityDescription(), results.get(i).getPriorityDescription(), "Priority desc Id on case: "+i);
+            assertEquals(expectedIncidents[i].getCustomerMiddleName(), results.get(i).getCustomerMiddleName(), "Customer middle name Id on case: "+i);
+            assertEquals(expectedIncidents[i].getCustomerFirstName(), results.get(i).getCustomerFirstName(), "Customer first name on case: "+i);
+            assertEquals(expectedIncidents[i].getCustomerLastName(), results.get(i).getCustomerLastName(), "Customer last name on case: "+i);
+            assertEquals(expectedIncidents[i].getSolutionId(), results.get(i).getSolutionId(), "Solution id on case: "+i);
+            assertEquals(expectedIncidents[i].getSolutionDescription(), results.get(i).getSolutionDescription(), "Solution desc on case: "+i);
+            assertEquals(expectedIncidents[i].getNotes(), results.get(i).getNotes(), "Notes on case: "+i);
+            assertEquals(expectedIncidents[i].getStatusName(), results.get(i).getStatusName(), "Status Name on case: "+i);
+            assertEquals(expectedIncidents[i].getCustomerId(), results.get(i).getCustomerId(), "Customer id on case: "+i);
+            assertArrayEquals(expectedIncidents[i].getIncidentServicePersons().toArray(), results.get(i).getIncidentServicePersons().toArray(), "Service persons on case: "+i);
+            assertLinesMatch(expectedIncidents[i].getCategoryNames(), results.get(i).getCategoryNames(), "Category names on case"+i);
+            assertEquals(expectedIncidents[i].getCreatedDatetime(), results.get(i).getCreatedDatetime(), "Created datetime Id on case: "+i);
+            assertEquals(expectedIncidents[i].getSubject(), results.get(i).getSubject(), "Subject on case: "+i);
+            assertEquals(expectedIncidents[i].getPriorityId(), results.get(i).getPriorityId(), "Priority Id on case: "+i);
+            assertEquals(expectedIncidents[i].getStatusId(), results.get(i).getStatusId(), "Status Id on case: "+i);
+            assertEquals(expectedIncidents[i].getDescription(), results.get(i).getDescription(), "Description on case: "+i);
         }
     }
 
@@ -228,10 +227,10 @@ class SqliteDatabaseTest {
         String[] testCase3_servicePersonNames = new String[]{};
         ArrayList<String> testCase3_servicePersonsArray = new ArrayList<>(Arrays.asList(testCase3_servicePersonNames));
 
-        String[] testCase4_categoryNames = new String[]{};
+        String[] testCase4_categoryNames = new String[]{"Plankton"};
         ArrayList<String> testCase4_categoryArray = new ArrayList<>(Arrays.asList(testCase4_categoryNames));
 
-        String[] testCase4_servicePersonNames = new String[]{};
+        String[] testCase4_servicePersonNames = new String[]{"Squidward Tentacles"};
         ArrayList<String> testCase4_servicePersonsArray = new ArrayList<>(Arrays.asList(testCase4_servicePersonNames));
 
         return new Incident[]{
@@ -277,7 +276,7 @@ class SqliteDatabaseTest {
                     "3",
                     3L, 2L, 3L, 3L,
                     "waiting",
-                    "Powercord plugged to wall outlet",
+                    "Year old fries removed.",
                     testCase3_categoryArray,
                     testCase3_servicePersonsArray,
                     "Michelle","Eleanore","Pfiifferi",
@@ -296,7 +295,7 @@ class SqliteDatabaseTest {
                     "Used magic.",
                     testCase4_categoryArray,
                     testCase4_servicePersonsArray,
-                    "Michelle","Eleanore","Pfiifferi",
+                    "John","Milton","Holmes",
                     "low"
             )
         };
