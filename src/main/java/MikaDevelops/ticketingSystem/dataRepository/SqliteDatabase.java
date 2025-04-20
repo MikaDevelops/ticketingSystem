@@ -187,7 +187,7 @@ public class SqliteDatabase implements DataBaseService{
     public List<String> getIncidentCategories(long incidentId){
 
         // TODO: read incident categories
-        String[] categories = {"workstation","Plankton"};
+        String[] categories = {"Workstation","Plankton"};
         return List.of(categories);
     }
 
