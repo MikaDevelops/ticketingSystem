@@ -184,6 +184,14 @@ public class SqliteDatabase implements DataBaseService{
     }
 
     @Override
+    public List<String> getIncidentCategories(long incidentId){
+
+        // TODO: read incident categories
+        String[] categories = {"workstation","Plankton"};
+        return List.of(categories);
+    }
+
+    @Override
     public List<String> getServicePersons(long incidentId){
         List<String> servicePersons =  new ArrayList<>();
         try( Connection connection = this.getConnection(); ){
@@ -218,7 +226,6 @@ public class SqliteDatabase implements DataBaseService{
                     incident.description, incident.notes, incident.related_incidents, incident.status_id,
                     incident.customer_id, incident.priority_id, incident.solution_id,
                     service_person.name AS service_person_name,
-                    category.name AS category_name,
                     status.name AS status_name,
                     customer.first_name AS customer_first_name,
                     customer.middle_name AS customer_middle_name,
@@ -229,7 +236,6 @@ public class SqliteDatabase implements DataBaseService{
                     LEFT JOIN incident_service_person ON incident.incident_id = incident_service_person.incident_id
                     LEFT JOIN incident_category ON incident.incident_id = incident_category.incident_id
                     LEFT JOIN service_person ON service_person.person_id = incident_service_person.person_id
-                    LEFT JOIN category ON category.category_id = incident_category.category_id
                     LEFT JOIN status ON status.status_id = incident.status_id
                     LEFT JOIN customer ON customer.customer_id = incident.customer_id
                     LEFT JOIN priority ON priority.priority_id = incident.priority_id
