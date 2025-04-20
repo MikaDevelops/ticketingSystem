@@ -221,11 +221,10 @@ public class SqliteDatabase implements DataBaseService{
 
             //TODO: should return all incidents
             String sqlString = """
-                    SELECT DISTINCT
+                    SELECT
                     incident.incident_id, incident.created_datetime,incident.subject,
                     incident.description, incident.notes, incident.related_incidents, incident.status_id,
                     incident.customer_id, incident.priority_id, incident.solution_id,
-                    service_person.name AS service_person_name,
                     status.name AS status_name,
                     customer.first_name AS customer_first_name,
                     customer.middle_name AS customer_middle_name,
@@ -233,9 +232,6 @@ public class SqliteDatabase implements DataBaseService{
                     priority.description AS priority_description,
                     solution.description AS solution_description
                     FROM incident
-                    LEFT JOIN incident_service_person ON incident.incident_id = incident_service_person.incident_id
-                    LEFT JOIN incident_category ON incident.incident_id = incident_category.incident_id
-                    LEFT JOIN service_person ON service_person.person_id = incident_service_person.person_id
                     LEFT JOIN status ON status.status_id = incident.status_id
                     LEFT JOIN customer ON customer.customer_id = incident.customer_id
                     LEFT JOIN priority ON priority.priority_id = incident.priority_id
@@ -243,28 +239,42 @@ public class SqliteDatabase implements DataBaseService{
                     """;
 
             Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery(sqlString);
+            ResultSet incidentResults = statement.executeQuery(sqlString);
 
-            HashMap<Long,Incident> incidentsHashMap = new HashMap<>();
-            while (results.next()){
-                long incidentId = results.getLong("incident_id");
-                if(incidentsHashMap.containsKey(incidentId)){
-                    System.out.println("double");
-                }
-                else{
-                    Incident incident = new Incident();
-                    incident.setIncidentId(incidentId);
-                    incident.setCreatedDatetime(results.getLong("created_datetime"));
-                    incident.setSubject(results.getString("subject"));
-                    incident.setDescription(results.getString("description"));
-                    incident.setNotes(results.getString("notes"));
+            List<Incident> allIncidents = new ArrayList<>();
 
-                    incidentsHashMap.put(incidentId, incident);
-                }
+            while (incidentResults.next()){
+
+                long incidentId = incidentResults.getLong("incident_id");
+
+                List<String>  categories = this.getIncidentCategories(incidentId);
+                List<String>  servicePersons = this.getServicePersons(incidentId);
+
+                Incident incident = new Incident(
+                        incidentId,
+                        incidentResults.getLong("created_datetime"),
+                        incidentResults.getString("subject"),
+                        incidentResults.getString("description"),
+                        incidentResults.getString("notes"),
+                        incidentResults.getString("related_incidents"),
+                        incidentResults.getLong("status_id"),
+                        incidentResults.getLong("customer_id"),
+                        incidentResults.getLong("priority_id"),
+                        incidentResults.getLong("solution_id"),
+                        incidentResults.getString("status_name"),
+                        incidentResults.getString("solution_description"),
+                        categories, servicePersons,
+                        incidentResults.getString("customer_first_name"),
+                        incidentResults.getString("customer_middle_name"),
+                        incidentResults.getString("customer_last_name"),
+                        incidentResults.getString("priority_description")
+                );
+
+                allIncidents.add(incident);
 
             }
 
-            Incident in1 = this.getIncidentById(1L);
+            /*Incident in1 = this.getIncidentById(1L);
             Incident in2 = this.getIncidentById(2L);
             Incident in3 = this.getIncidentById(3L);
             Incident in4 = this.getIncidentById(4L);
@@ -274,10 +284,10 @@ public class SqliteDatabase implements DataBaseService{
                     in2,
                     in3,
                     in4
-            };
+            };*/
 
 
-            return List.of(incidents);
+            return allIncidents; //List.of(incidents);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
