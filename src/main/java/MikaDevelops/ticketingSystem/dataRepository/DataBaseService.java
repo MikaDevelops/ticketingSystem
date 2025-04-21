@@ -38,5 +38,4 @@ public interface DataBaseService {
     void setIncidentPriority(long incidentId, long priorityId);
 
     List<String> getServicePersons(long incidentId);
-    List<String> getIncidentCategories(long incidentId);
 }

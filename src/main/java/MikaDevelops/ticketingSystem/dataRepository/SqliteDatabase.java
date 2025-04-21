@@ -184,14 +184,6 @@ public class SqliteDatabase implements DataBaseService{
     }
 
     @Override
-    public List<String> getIncidentCategories(long incidentId){
-
-        // TODO: read incident categories
-        String[] categories = {"Workstation","Plankton"};
-        return List.of(categories);
-    }
-
-    @Override
     public List<String> getServicePersons(long incidentId){
         List<String> servicePersons =  new ArrayList<>();
         try( Connection connection = this.getConnection(); ){
@@ -247,7 +239,7 @@ public class SqliteDatabase implements DataBaseService{
 
                 long incidentId = incidentResults.getLong("incident_id");
 
-                List<String>  categories = this.getIncidentCategories(incidentId);
+                List<String>  categories = this.getCategoriesByIncidentId(incidentId);
                 List<String>  servicePersons = this.getServicePersons(incidentId);
 
                 Incident incident = new Incident(
