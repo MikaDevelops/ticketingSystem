@@ -103,8 +103,10 @@ public class SqliteDatabase implements DataBaseService{
                     (
                       category_id INT NOT NULL,
                       incident_id INT NOT NULL,
-                      FOREIGN KEY (category_id) REFERENCES category(category_id),
+                      FOREIGN KEY (category_id) REFERENCES category(category_id)
+                        ON DELETE CASCADE,
                       FOREIGN KEY (incident_id) REFERENCES incident(incident_id)
+                        ON DELETE CASCADE
                     );
                     """);
 
@@ -115,6 +117,7 @@ public class SqliteDatabase implements DataBaseService{
                       incident_id INT NOT NULL,
                       FOREIGN KEY (person_id) REFERENCES service_person(person_id),
                       FOREIGN KEY (incident_id) REFERENCES incident(incident_id)
+                        ON DELETE CASCADE
                     );
                     """);
 

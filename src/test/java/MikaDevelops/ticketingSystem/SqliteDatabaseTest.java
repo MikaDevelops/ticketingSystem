@@ -179,6 +179,34 @@ class SqliteDatabaseTest {
         }
     }
 
+    @Test
+    void categoryTableShouldNotHaveDeletedIncidents(){
+        testName = "categoryTableShouldNotHaveDeletedIncidents";
+        try (Connection conn = dbService.getConnection()) {
+
+            Statement statement = conn.createStatement();
+
+            // remove first test case from incident table
+            String sqlDeleteString = "DELETE FROM incident WHERE incident_id = 1;";
+            statement.executeUpdate(sqlDeleteString);
+            conn.commit();
+
+            String sqlGetCategoriesString = "SELECT * FROM incident_category WHERE incident_id = 1;";
+            ResultSet results = statement.executeQuery(sqlGetCategoriesString);
+            conn.commit();
+            assertFalse(results.next());
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Disabled
+    @Test
+    void categoryTableShouldNotHaveDeletedCategories(){
+        testName = "categoryTableShouldNotHaveDeletedCategories";
+    }
+
     void insertTestCases(Connection connection){
         String[] inserts = {
                 "INSERT INTO status(name) values ('new'),('under work'),('waiting'),('closed');",
