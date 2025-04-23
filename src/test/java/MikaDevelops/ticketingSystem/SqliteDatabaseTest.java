@@ -194,7 +194,27 @@ class SqliteDatabaseTest {
             String sqlGetCategoriesString = "SELECT * FROM incident_category WHERE incident_id = 1;";
             ResultSet results = statement.executeQuery(sqlGetCategoriesString);
             conn.commit();
-            assertFalse(results.next());
+            assertFalse(results.next(), "Removed incident shouldn't be in incident_category table.");
+
+            // Category should still be there
+            String sqlGetCategoryString = "SELECT * FROM category WHERE category_id = 1";
+            ResultSet categoryResults = statement.executeQuery(sqlGetCategoryString);
+            conn.commit();
+
+            String expectedCategory = "Workstation";
+            String receivedCategory = categoryResults.getString("name");
+            assertEquals(expectedCategory, receivedCategory, "Category should exist after incident removed.");
+
+            // Remove a category, there should be no incident to that category in incident_category
+            String sqlRemoveCategory = "DELETE FROM category WHERE category_id = 2";
+            statement.executeUpdate(sqlRemoveCategory);
+            conn.commit();
+
+            String sqlGetIncidentCategories = "SELECT * FROM incident_category WHERE category_id = 2";
+            ResultSet incidentCategoryResult = statement.executeQuery(sqlGetIncidentCategories);
+            conn.commit();
+            assertFalse(incidentCategoryResult.next(), "Removed category should not be in incident_category");
+
 
         }catch (SQLException e){
             e.printStackTrace();
