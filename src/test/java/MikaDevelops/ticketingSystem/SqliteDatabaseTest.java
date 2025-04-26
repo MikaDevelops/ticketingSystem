@@ -205,6 +205,19 @@ class SqliteDatabaseTest {
             String receivedCategory = categoryResults.getString("name");
             assertEquals(expectedCategory, receivedCategory, "Category should exist after incident removed.");
 
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void categoryTableShouldNotHaveDeletedCategories(){
+        testName = "categoryTableShouldNotHaveDeletedCategories";
+
+        try (Connection conn = dbService.getConnection()) {
+
+            Statement statement = conn.createStatement();
+
             // Remove a category, there should be no incident to that category in incident_category
             String sqlRemoveCategory = "DELETE FROM category WHERE category_id = 2";
             statement.executeUpdate(sqlRemoveCategory);
@@ -219,12 +232,6 @@ class SqliteDatabaseTest {
         }catch (SQLException e){
             e.printStackTrace();
         }
-    }
-
-    @Disabled
-    @Test
-    void categoryTableShouldNotHaveDeletedCategories(){
-        testName = "categoryTableShouldNotHaveDeletedCategories";
     }
 
     void insertTestCases(Connection connection){
