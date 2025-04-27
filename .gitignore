@@ -71,3 +71,8 @@ build/
 
 ### database directory ###
 data/
+
+### RobotFramework ###
+log.html
+output.xml
+report.html
