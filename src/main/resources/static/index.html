@@ -4,23 +4,47 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script>
+
+        var incidentsData;
+        
         async function loadAllIncidents(){
             try{
                 const response = await fetch("http://localhost:8080/api/v1/incidents");
                 if (!response.ok) throw new Error(`response status: ${response.status}`);
 
-                const jsonData = await response.json();
-                console.log(jsonData);
+                incidentsData = await response.json();
+                listAllIncidents();
             }
             catch(error){
                 alert(error.message);
             }
         }
+        function listAllIncidents(){
+            let incidentId="test1";
+            let subject = "test2";
+            let status = "test3";
+            let customer = "customer";
+            let supportPerson = "support";
+            let incidentRow = 
+                `<div id="${incidentId}"></div><div>${subject}</div><div>${status}</div><div>${customer}</div><div>${supportPerson}</div>`;
+            console.log(incidentsData);
+            
+            document.getElementById("case-list").innerHTML=incidentRow;
+        }
 
         loadAllIncidents();
+        
     </script>
+    <style>
+        .case-list-container{
+            display:grid;
+            grid-template-columns: auto auto auto auto auto;
+        }
+    </style>
 </head>
 <body>
-  This is the ticketing service web page
+  <h1>This is the ticketing service web page</h1>
+  <div id="casedata"></div>
+  <div id="case-list" class="case-list-container"></div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 *** Settings ***
 Library    SeleniumLibrary
+Library    String
 
 *** Variables ***
 ${site-url}        http://localhost:8080
@@ -11,11 +12,11 @@ Create A Random String
     Log To Console    We finished generating a random string
 
 Incidents load to the page
-    Should load incident nr 1
+    Open Browser
     [Teardown]
 
 
 *** Keywords ***
-Should load incident nr 1
+Should load incident nr1
     Open Browser    ${site-url}    ${browser-to-use}
 
