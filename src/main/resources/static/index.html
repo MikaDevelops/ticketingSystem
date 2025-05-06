@@ -23,10 +23,13 @@
             let incidentElement = document.getElementById("case-list");
             incidentElement.replaceChildren();
 
+
             for (row of incidentsData){
                 let incidentId = document.createElement("DIV");
                 incidentId.innerText=row.incidentId;
                 let subject = document.createElement("DIV");
+                subject.setAttribute("id", row.incidentId);
+                subject.addEventListener('click', openIncident);
                 subject.innerText=row.subject;
                 let status = document.createElement("DIV");
                 status.innerText=row.statusName;
@@ -34,9 +37,51 @@
                 customer.innerText = [row.customerFirstName,row.customerMiddleName,row.customerLastName].join(" ");
                 let supportPerson = document.createElement("DIV");
                 supportPerson.innerText = row.incidentServicePersons.join(", ");
-                 //   `<div id="${incidentId}"></div><div>${subject}</div><div>${status}</div><div>${customer}</div><div>${supportPerson}</div>`;
                 document.getElementById("case-list").append(incidentId,subject,status,customer,supportPerson);
             }
+        }
+
+        function openIncident(event){
+            
+            function makeRow(key, value){
+
+                let row = document.createElement("TR");
+                let keyCell = document.createElement("TD");
+                let valueCell = document.createElement("TD");
+
+                keyCell.innerText = key;
+                valueCell.innerText = value;
+                row.append(keyCell,valueCell);
+                
+                return row;
+            }
+
+            function findIncidentId(incidentId){
+                return incidentsData.findIndex(x => x.incidentId==incidentId);
+            }
+
+            let displayArea = document.getElementById("casedata");
+            displayArea.replaceChildren();
+            let singleIncidentData = incidentsData[findIncidentId(event.target.id)];
+            let table = document.createElement("TABLE");
+            let header = document.createElement("TR");
+            let th1 = document.createElement("TH");
+            th1.innerHTML="Incident attribute";
+            let th2 = document.createElement("TH");
+            th2.innerHTML="value";
+            header.append(th1, th2);
+            table.appendChild(header);
+
+            for(key in singleIncidentData){
+                table.appendChild(makeRow(key, singleIncidentData[key]));
+            }
+
+            displayArea.append(table);
+
+        }
+
+        function closeIncidentViewer(){
+            document.getElementById("casedata").set
         }
 
         loadAllIncidents();
@@ -46,7 +91,16 @@
         .case-list-container{
             display:grid;
             grid-template-columns: auto auto auto auto auto;
+            padding: 6;
         }
+        #casedata{
+            
+        }
+        #casedata>table, th, td{
+            border: 1px solid darkgrey;
+            background-color: lightgray;
+        }
+
     </style>
 </head>
 <body>
