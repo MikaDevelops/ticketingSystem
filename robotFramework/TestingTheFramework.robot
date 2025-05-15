@@ -20,6 +20,14 @@ Incidents opens to caseview
     Incident 2 should be on caseview
     [Teardown]    Close Browser
 
+Incident notes persist on reload
+    Open browser to incidents page
+    Open incident 5 to caseview
+    Check notes is empty
+    Insert notes to notes field    Testing notes for testing purposes.
+    Reload Page
+    Check notes has updated value    Testing notes for testing purposes.
+    [Teardown]    Close Browser
 *** Keywords ***
 Open browser to incidents page
     Open Browser    ${site-url}    browser=${browser-to-use}
@@ -75,3 +83,22 @@ Incident 2 should be on caseview
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[17]/td[2]   Eleanore
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[18]/td[2]   Pfiifferi
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[19]/td[2]   high
+
+Open incident 5 to caseview
+    Wait For Condition    return document.readyState == "complete"
+    Click Element    id:case-list >> id:5
+
+Check notes is empty
+    Textarea Value Should Be    id:casedata >> tag:table >> xpath://tr[6]/td[2]/textarea[1]   ${EMPTY}
+
+Insert notes to notes field
+    [Arguments]    ${text_to_insert}
+    Click Element    id:casedata >> tag:table >> xpath://tr[6]/td[2]/textarea[1]
+    Input Text    id:casedata >> tag:table >> xpath://tr[6]/td[2]/textarea[1]    ${text_to_insert}
+
+Check notes has updated value
+    [Arguments]    ${updated_value}
+    Wait For Condition    return document.readyState == "complete"
+    Click Element    id:case-list >> id:5
+    Textarea Value Should Be    id:casedata >> tag:table >> xpath://tr[6]/td[2]/textarea[1]    ${updated_value}
+    Sleep    4

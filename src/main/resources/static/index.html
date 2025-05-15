@@ -6,6 +6,7 @@
     <script>
 
         var incidentsData;
+        var editableFields = ["notes"];
         
         async function loadAllIncidents(){
             try{
@@ -43,14 +44,24 @@
 
         function openIncident(event){
             
-            function makeRow(key, value){
+            function makeRow(key, value, type){
 
                 let row = document.createElement("TR");
                 let keyCell = document.createElement("TD");
                 let valueCell = document.createElement("TD");
 
                 keyCell.innerText = key;
-                valueCell.innerText = value;
+                console.log(type);
+                if (type === "editable"){
+                    let txtArea = document.createElement("textarea");
+                    let notesId = "notes-"+event.target.id;
+                    txtArea.setAttribute("id", notesId);
+                    txtArea.value = value;
+                    valueCell.appendChild(txtArea);
+                }else{
+                    valueCell.innerText = value;
+                }
+                
                 row.append(keyCell,valueCell);
                 
                 return row;
@@ -73,7 +84,9 @@
             table.appendChild(header);
 
             for(key in singleIncidentData){
-                table.appendChild(makeRow(key, singleIncidentData[key]));
+                let type;
+                if (key == "notes") type = "editable";
+                table.appendChild(makeRow(key, singleIncidentData[key], type));
             }
 
             displayArea.append(table);
