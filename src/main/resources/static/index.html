@@ -51,12 +51,12 @@
                 let valueCell = document.createElement("TD");
 
                 keyCell.innerText = key;
-                console.log(type);
                 if (type === "editable"){
                     let txtArea = document.createElement("textarea");
                     let notesId = "notes-"+event.target.id;
                     txtArea.setAttribute("id", notesId);
                     txtArea.value = value;
+                    txtArea.addEventListener("input", updateNotesTxt);
                     valueCell.appendChild(txtArea);
                 }else{
                     valueCell.innerText = value;
@@ -94,7 +94,22 @@
         }
 
         function closeIncidentViewer(){
-            document.getElementById("casedata").set
+            //document.getElementById("casedata").set
+        }
+
+        function getIdFromElementId(elementId){
+            let idArray = elementId.split("-");
+            let lastIndex = idArray.length-1;
+            return idArray[lastIndex];
+        }
+
+        function getIncidentById (id){
+            return incidentsData.find(({incidentId})=>incidentId == id);
+        }
+
+        function updateNotesTxt(event){
+            let incident = getIncidentById( getIdFromElementId(event.target.id) );
+            incident.notes = event.target.value;
         }
 
         loadAllIncidents();
