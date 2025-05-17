@@ -20,6 +20,7 @@
                 alert(error.message);
             }
         }
+
         function listAllIncidents(){
             let incidentElement = document.getElementById("case-list");
             incidentElement.replaceChildren();
@@ -55,9 +56,35 @@
                     let txtArea = document.createElement("textarea");
                     let notesId = "notes-"+event.target.id;
                     txtArea.setAttribute("id", notesId);
-                    txtArea.value = value;
+                    
+                    let notesDifferRemote = false;
+                    let txtAreaRemoteNotes = null;
+
+                    if(localStorage.getItem(notesId)){
+                        txtArea.value = localStorage.getItem(notesId);
+
+                        if(txtArea.value != value){
+                            
+                            notesDifferRemote = true;
+                            txtAreaRemoteNotes = document.createElement("textarea");
+                            txtAreaRemoteNotes.setAttribute("id","remote-"+notesId);
+                            txtAreaRemoteNotes.value = value;
+                        }
+
+                    }else{
+                        txtArea.value = value;
+                    }
+
                     txtArea.addEventListener("input", updateNotesTxt);
                     valueCell.appendChild(txtArea);
+                    
+                    if(notesDifferRemote){
+                        valueCell.appendChild(document.createElement("br"));
+                        valueCell.append("Below notes from database.")
+                        valueCell.appendChild(document.createElement("br"));
+                        valueCell.appendChild(txtAreaRemoteNotes);
+                    }
+
                 }else{
                     valueCell.innerText = value;
                 }
@@ -110,6 +137,7 @@
         function updateNotesTxt(event){
             let incident = getIncidentById( getIdFromElementId(event.target.id) );
             incident.notes = event.target.value;
+            localStorage.setItem(event.target.id, event.target.value);
         }
 
         loadAllIncidents();

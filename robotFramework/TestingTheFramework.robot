@@ -28,6 +28,19 @@ Incident notes persist on reload
     Reload Page
     Check notes has updated value    Testing notes for testing purposes.
     [Teardown]    Close Browser
+
+Incident notes saved to database
+    Open browser to incidents page
+    Open incident 5 to caseview
+    Clear notes
+    Insert notes to notes field    Let's save this text to database.
+    Click save incident button
+    Clear notes
+    Reload Page
+    Open incident 5 to caseview
+    Check notes has updated value    Let's save this text to database.
+    [Teardown]    Close Browser
+
 *** Keywords ***
 Open browser to incidents page
     Open Browser    ${site-url}    browser=${browser-to-use}
