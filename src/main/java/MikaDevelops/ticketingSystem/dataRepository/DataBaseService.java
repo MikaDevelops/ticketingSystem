@@ -1,6 +1,7 @@
 package MikaDevelops.ticketingSystem.dataRepository;
 
 import MikaDevelops.ticketingSystem.incident.Incident;
+import MikaDevelops.ticketingSystem.incident.ModificationInfo;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public interface DataBaseService {
 
     Incident getIncidentById(long id);
     List<Incident> getAllIncidents();
+    ModificationInfo getModificationInfo(long id);
 
     void saveIncident(Incident incident);
     void saveServicePerson();
