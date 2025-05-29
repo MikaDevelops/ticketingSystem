@@ -248,7 +248,8 @@ class SqliteDatabaseTest {
                     +"(15122, 'test subject443', 'test description443', 'test not33es3', '3',3,2,3,3),"
                     +"(15123, 'test subject444', 'test description444', 'test not33es4', '1',2,1,3,4);",
                 "INSERT INTO incident_service_person(person_id, incident_id) VALUES (1,1), (2,2), (1,2), (3,4);",
-                "INSERT INTO incident_category(category_id, incident_id) VALUES (1,1), (2,2), (3,2), (4,4);"
+                "INSERT INTO incident_category(category_id, incident_id) VALUES (1,1), (2,2), (3,2), (4,4);",
+                "INSERT INTO modification(timestamp_unix, incident_id, person_id) VALUES (1748535492, 1, 1);"
         };
 
         try (Statement statement = connection.createStatement()) {
