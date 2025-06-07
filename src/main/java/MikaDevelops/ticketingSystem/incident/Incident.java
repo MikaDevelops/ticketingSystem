@@ -5,12 +5,28 @@ import java.util.List;
 public class Incident {
 
     public Incident() {}
-    public Incident(long incidentId, long createdDatetime, String subject, String description,
-                    String notes, String relatedIncidentsId, long statusId, long customerId,
-                    long priorityId, long solutionId, String statusName, String solutionDescription,
-                    List<String> categoryNames, List<String> incidentServicePersons,
-                    String customerFirstName, String customerMiddleName, String customerLastName,
-                    String priorityDescription)
+    public Incident(
+            long incidentId,
+            long createdDatetime,
+            String subject,
+            String description,
+            String notes,
+            String relatedIncidentsId,
+            long statusId,
+            long customerId,
+            long priorityId,
+            long solutionId,
+            String statusName,
+            String solutionDescription,
+            List<String> categoryNames,
+            List<String> incidentServicePersons,
+            String customerFirstName,
+            String customerMiddleName,
+            String customerLastName,
+            String priorityDescription,
+            String modifiedBy,
+            long modifiedDateTime
+    )
     {
         this.incidentId = incidentId;
         this.createdDatetime = createdDatetime;
@@ -30,6 +46,8 @@ public class Incident {
         this.customerMiddleName = customerMiddleName;
         this.customerLastName = customerLastName;
         this.priorityDescription = priorityDescription;
+        this.modifiedBy = modifiedBy;
+        this.modifiedDateTime = modifiedDateTime;
     }
 
     private long incidentId;
@@ -50,6 +68,8 @@ public class Incident {
     private String customerMiddleName;
     private String customerLastName;
     private String priorityDescription;
+    private String modifiedBy;
+    private long modifiedDateTime;
 
     public List<String> getCategoryNames() { return this.categoryNames; }
     public void setCategoryNames(List<String> categoryNames) { this.categoryNames = categoryNames; }
@@ -167,4 +187,9 @@ public class Incident {
         this.priorityDescription = priorityDescription;
     }
 
+    public String getModifiedBy() { return modifiedBy; }
+    public void setModifiedBy(String modifiedBy) { this.modifiedBy = modifiedBy; }
+
+    public long getModifiedDateTime() { return modifiedDateTime; }
+    public void setModifiedDateTime(long modifiedDateTime) { this.modifiedDateTime = modifiedDateTime; }
 }

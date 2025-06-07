@@ -304,7 +304,9 @@ class SqliteDatabaseTest {
                     testCase1_categoryArray,
                     testCase1_servicePersonsArray,
                     "John","Milton","Holmes",
-                    "normal"
+                    "normal",
+                    "",
+                    0L
             ),
 
             new Incident(
@@ -320,7 +322,9 @@ class SqliteDatabaseTest {
                     testCase2_categoryArray,
                     testCase2_servicePersonsArray,
                     "Michelle","Eleanore","Pfiifferi",
-                    "high"
+                    "high",
+                    "",
+                    0L
             ),
 
             new Incident(
@@ -336,7 +340,9 @@ class SqliteDatabaseTest {
                     testCase3_categoryArray,
                     testCase3_servicePersonsArray,
                     "Michelle","Eleanore","Pfiifferi",
-                    "low"
+                    "low",
+                    "",
+                    0L
             ),
 
             new Incident(
@@ -352,7 +358,9 @@ class SqliteDatabaseTest {
                     testCase4_categoryArray,
                     testCase4_servicePersonsArray,
                     "John","Milton","Holmes",
-                    "low"
+                    "low",
+                    "",
+                    0L
             )
         };
     }

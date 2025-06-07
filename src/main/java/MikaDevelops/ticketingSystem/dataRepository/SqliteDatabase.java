@@ -1,6 +1,7 @@
 package MikaDevelops.ticketingSystem.dataRepository;
 
 import MikaDevelops.ticketingSystem.incident.Incident;
+import MikaDevelops.ticketingSystem.incident.ModificationInfo;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
@@ -229,7 +230,6 @@ public class SqliteDatabase implements DataBaseService{
     public List<Incident> getAllIncidents(){
         try( Connection connection = this.getConnection(); ){
 
-            //TODO: should return all incidents
             String sqlString = """
                     SELECT
                     incident.incident_id, incident.created_datetime,incident.subject,
@@ -277,7 +277,9 @@ public class SqliteDatabase implements DataBaseService{
                         incidentResults.getString("customer_first_name"),
                         incidentResults.getString("customer_middle_name"),
                         incidentResults.getString("customer_last_name"),
-                        incidentResults.getString("priority_description")
+                        incidentResults.getString("priority_description"),
+                        "",
+                        0L
                 );
 
                 allIncidents.add(incident);
@@ -304,6 +306,11 @@ public class SqliteDatabase implements DataBaseService{
         }
 
 
+    }
+
+    @Override
+    public ModificationInfo getModificationInfo(long id) {
+        return null;
     }
 
     @Override
