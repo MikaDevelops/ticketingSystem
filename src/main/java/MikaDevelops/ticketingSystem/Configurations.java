@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Configurations {
 
-    private final String dbAddress = "testing.db";
+    private final String dbAddress = "ticketing.db";
 
     @Bean(name="dataBaseAddress")
     public String returnAddress(){
