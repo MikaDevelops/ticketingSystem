@@ -73,6 +73,30 @@ class SqliteDatabaseTest {
         assertEquals(this.expectedIncidents[0].getPriorityDescription(), incident.getPriorityDescription());
         assertInstanceOf(List.class, incident.getIncidentServicePersons());
         assertArrayEquals(this.expectedIncidents[0].getIncidentServicePersons().toArray(), incident.getIncidentServicePersons().toArray());
+        assertEquals(this.expectedIncidents[0].getModifiedBy(), incident.getModifiedBy());
+        assertEquals(this.expectedIncidents[0].getModifiedDateTime(), incident.getModifiedDateTime());
+    }
+
+    @Test
+    void notModifiedIncidentShouldHaveEmptyModifierPerson (){
+        testName = "notModifiedIncidentShouldHaveEmptyModifierPerson";
+
+        long incidentId = this.expectedIncidents[1].getIncidentId();
+
+        Incident incident = dbService.getIncidentById(incidentId);
+
+        assertEquals(this.expectedIncidents[1].getModifiedBy(), incident.getModifiedBy(), "Person who modified record if any.");
+    }
+
+    @Test
+    void notModifiedIncidentShouldHaveZeroInDateTime (){
+        testName = "notModifiedIncidentShouldHaveZeroInDateTime";
+
+        long incidentId = this.expectedIncidents[1].getIncidentId();
+
+        Incident incident = dbService.getIncidentById(incidentId);
+
+        assertEquals(this.expectedIncidents[1].getModifiedDateTime(), incident.getModifiedDateTime(), "Timestamp of modification if any.");
     }
 
    @Test
@@ -176,6 +200,8 @@ class SqliteDatabaseTest {
             assertEquals(expectedIncidents[i].getPriorityId(), results.get(i).getPriorityId(), "Priority Id on case: "+i);
             assertEquals(expectedIncidents[i].getStatusId(), results.get(i).getStatusId(), "Status Id on case: "+i);
             assertEquals(expectedIncidents[i].getDescription(), results.get(i).getDescription(), "Description on case: "+i);
+            assertEquals(expectedIncidents[i].getModifiedBy(), results.get(i).getModifiedBy(), "Modified by on case: "+i);
+            assertEquals(expectedIncidents[i].getModifiedDateTime(), results.get(i).getModifiedDateTime(), "Modified datetime on case: "+i);
         }
     }
 
@@ -305,8 +331,8 @@ class SqliteDatabaseTest {
                     testCase1_servicePersonsArray,
                     "John","Milton","Holmes",
                     "normal",
-                    "",
-                    0L
+                    "Patrick Star",
+                    1748535492L
             ),
 
             new Incident(

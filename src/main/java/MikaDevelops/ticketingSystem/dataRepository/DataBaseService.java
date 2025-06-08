@@ -4,7 +4,6 @@ import MikaDevelops.ticketingSystem.incident.Incident;
 import MikaDevelops.ticketingSystem.incident.ModificationInfo;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface DataBaseService {
@@ -23,7 +22,7 @@ public interface DataBaseService {
 
     Incident getIncidentById(long id);
     List<Incident> getAllIncidents();
-    ModificationInfo getModificationInfo(long id);
+    ModificationInfo getLatestModificationTime(long id);
 
     void saveIncident(Incident incident);
     void saveServicePerson();

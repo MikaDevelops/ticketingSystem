@@ -156,19 +156,26 @@ public class SqliteDatabase implements DataBaseService{
                 incident.priority_id, incident.solution_id, status.name AS status_name,
                 customer.first_name AS customer_first_name, customer.middle_name AS customer_middle_name,
                 customer.last_name AS customer_last_name,
-                priority.description AS priority_desc , solution.description AS solution_desc
+                priority.description AS priority_desc , solution.description AS solution_desc,
+                mod.name AS modification_person, mod.timestamp_unix AS last_modification_time
                 FROM incident
                 LEFT JOIN status ON incident.status_id = status.status_id
                 LEFT JOIN solution ON incident.solution_id = solution.solution_id
                 LEFT JOIN customer ON incident.customer_id = customer.customer_id
                 LEFT JOIN priority ON incident.priority_id = priority.priority_id
-                WHERE incident_id = ?;
+                LEFT JOIN
+                    (SELECT modification.incident_id, modification.timestamp_unix, service_person.name FROM modification
+                    LEFT JOIN service_person ON service_person.person_id = modification.person_id
+                    WHERE modification.incident_id = ? ORDER BY modification.modification_id DESC LIMIT 1)
+                AS mod ON incident.incident_id = mod.incident_id WHERE incident.incident_id = ?;
                 """);
             )
         {
             statement.setLong(1, id);
+            statement.setLong(2, id);
             ResultSet result = statement.executeQuery();
             connection.commit();
+
             Incident incident = new Incident();
             if (result.next()){
                 incident.setIncidentId(result.getLong("incident_id"));
@@ -187,6 +194,10 @@ public class SqliteDatabase implements DataBaseService{
                 incident.setCustomerMiddleName(result.getString("customer_middle_name"));
                 incident.setCustomerLastName(result.getString("customer_last_name"));
                 incident.setPriorityDescription(result.getString("priority_desc"));
+                incident.setModifiedBy(
+                        this.handleNullString(result.getString("modification_person"))
+                );
+                incident.setModifiedDateTime(result.getLong("last_modification_time"));
             }
 
             List<String> incidentServicePersons = this.getServicePersons(id);
@@ -233,19 +244,25 @@ public class SqliteDatabase implements DataBaseService{
             String sqlString = """
                     SELECT
                     incident.incident_id, incident.created_datetime,incident.subject,
-                    incident.description, incident.notes, incident.related_incidents, incident.status_id,
+                    incident.description AS incident_desc, incident.notes, incident.related_incidents, incident.status_id,
                     incident.customer_id, incident.priority_id, incident.solution_id,
                     status.name AS status_name,
                     customer.first_name AS customer_first_name,
                     customer.middle_name AS customer_middle_name,
                     customer.last_name AS customer_last_name,
                     priority.description AS priority_description,
-                    solution.description AS solution_description
+                    solution.description AS solution_description,
+                    mod.name AS modification_person, mod.timestamp_unix AS last_modification_time
                     FROM incident
                     LEFT JOIN status ON status.status_id = incident.status_id
                     LEFT JOIN customer ON customer.customer_id = incident.customer_id
                     LEFT JOIN priority ON priority.priority_id = incident.priority_id
-                    LEFT JOIN solution ON solution.solution_id = incident.solution_id;
+                    LEFT JOIN solution ON solution.solution_id = incident.solution_id
+                    LEFT JOIN
+                        (SELECT modification.incident_id, modification.timestamp_unix, service_person.name FROM modification
+                        LEFT JOIN service_person ON service_person.person_id = modification.person_id
+                        ORDER BY modification.modification_id DESC LIMIT 1)
+                        AS mod ON incident.incident_id = mod.incident_id;
                     """;
 
             Statement statement = connection.createStatement();
@@ -264,7 +281,7 @@ public class SqliteDatabase implements DataBaseService{
                         incidentId,
                         incidentResults.getLong("created_datetime"),
                         incidentResults.getString("subject"),
-                        incidentResults.getString("description"),
+                        incidentResults.getString("incident_desc"),
                         incidentResults.getString("notes"),
                         incidentResults.getString("related_incidents"),
                         incidentResults.getLong("status_id"),
@@ -278,8 +295,8 @@ public class SqliteDatabase implements DataBaseService{
                         incidentResults.getString("customer_middle_name"),
                         incidentResults.getString("customer_last_name"),
                         incidentResults.getString("priority_description"),
-                        "",
-                        0L
+                        this.handleNullString( incidentResults.getString("modification_person") ),
+                        incidentResults.getLong("last_modification_time")
                 );
 
                 allIncidents.add(incident);
@@ -309,7 +326,7 @@ public class SqliteDatabase implements DataBaseService{
     }
 
     @Override
-    public ModificationInfo getModificationInfo(long id) {
+    public ModificationInfo getLatestModificationTime(long id) {
         return null;
     }
 
@@ -418,5 +435,10 @@ public class SqliteDatabase implements DataBaseService{
     private String getBaseAddress(){
         if (this.databaseAddress.equals(":memory:")) return "";
         else return "data/";
+    }
+
+    private String handleNullString(String stringValue){
+        if (stringValue == null) return "";
+        else return stringValue;
     }
 }
