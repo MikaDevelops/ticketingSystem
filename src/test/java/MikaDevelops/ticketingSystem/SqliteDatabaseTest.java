@@ -3,6 +3,7 @@ package MikaDevelops.ticketingSystem;
 import MikaDevelops.ticketingSystem.dataRepository.DataBaseService;
 import MikaDevelops.ticketingSystem.dataRepository.SqliteDatabase;
 import MikaDevelops.ticketingSystem.incident.Incident;
+import MikaDevelops.ticketingSystem.incident.ModificationInfo;
 import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -258,6 +259,23 @@ class SqliteDatabaseTest {
         }catch (SQLException e){
             e.printStackTrace();
         }
+    }
+
+    @Test
+    void latestModificationInfo(){
+        testName = "latestModificationInfo";
+
+        ModificationInfo resultHasValues = dbService.getLatestModificationInfo(1L);
+        ModificationInfo resultNoModification = dbService.getLatestModificationInfo(2L);
+
+        Incident expectedWithValues = this.expectedIncidents[0];
+        Incident expectedNoModification = this.expectedIncidents[1];
+
+        assertEquals(expectedWithValues.getModifiedBy(), resultHasValues.getModifiedBy());
+        assertEquals(expectedNoModification.getModifiedDateTime(), resultHasValues.getUnixTimestamp());
+
+        assertEquals(expectedNoModification.getModifiedBy(), resultNoModification.getModifiedBy());
+        assertEquals(expectedNoModification.getModifiedDateTime(), resultNoModification.getUnixTimestamp());
     }
 
     void insertTestCases(Connection connection){

@@ -22,7 +22,7 @@ public interface DataBaseService {
 
     Incident getIncidentById(long id);
     List<Incident> getAllIncidents();
-    ModificationInfo getLatestModificationTime(long id);
+    ModificationInfo getLatestModificationInfo(long id);
 
     void saveIncident(Incident incident);
     void saveServicePerson();

@@ -6,6 +6,7 @@ public class ModificationInfo {
     private Long unixTimestamp;
     private Long incidentId;
     private Long servicePersonId;
+    private String modifiedBy;
 
     public ModificationInfo(){};
     public ModificationInfo(Long modificationId, Long unixTimestamp, Long incidentId, Long servicePersonId) {
@@ -45,5 +46,13 @@ public class ModificationInfo {
 
     public void setServicePersonId(Long servicePersonId) {
         this.servicePersonId = servicePersonId;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 }

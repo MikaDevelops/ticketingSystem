@@ -326,7 +326,7 @@ public class SqliteDatabase implements DataBaseService{
     }
 
     @Override
-    public ModificationInfo getLatestModificationTime(long id) {
+    public ModificationInfo getLatestModificationInfo(long id) {
         return null;
     }
 
