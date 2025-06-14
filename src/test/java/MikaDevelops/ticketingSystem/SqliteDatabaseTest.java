@@ -409,6 +409,20 @@ class SqliteDatabaseTest {
         };
     }
 
+    ModificationInfo expectedLatestModificationInfo(){
+
+        ModificationInfo expectedInfo = new ModificationInfo(
+                1L,
+                1748535492L,
+                1L,
+                1L
+        );
+
+        expectedInfo.setModifiedBy("Patrick Star");
+        
+        return expectedInfo;
+    }
+
     String timestamp(){
         LocalDateTime dateTime = LocalDateTime.now();
         String timestamp = dateTime.getYear() +"-"
