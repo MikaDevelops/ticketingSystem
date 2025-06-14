@@ -23,7 +23,8 @@ class SqliteDatabaseTest {
 
     private static DataBaseService dbService;
     private static String testName;
-    private Incident[] expectedIncidents = this.expectedIncidents();
+    private final Incident[] expectedIncidents = this.expectedIncidents();
+    private final ModificationInfo[] expectedModificationInfo = this.expectedLatestModificationInfo();
 
     @BeforeEach
     void testSetup() {
@@ -268,14 +269,20 @@ class SqliteDatabaseTest {
         ModificationInfo resultHasValues = dbService.getLatestModificationInfo(1L);
         ModificationInfo resultNoModification = dbService.getLatestModificationInfo(2L);
 
-        Incident expectedWithValues = this.expectedIncidents[0];
-        Incident expectedNoModification = this.expectedIncidents[1];
+        ModificationInfo expectedWithValues = this.expectedModificationInfo[0];
+        ModificationInfo expectedNoModification = this.expectedModificationInfo[1];
 
-        assertEquals(expectedWithValues.getModifiedBy(), resultHasValues.getModifiedBy());
-        assertEquals(expectedNoModification.getModifiedDateTime(), resultHasValues.getUnixTimestamp());
+        assertEquals(expectedWithValues.getModifiedBy(), resultHasValues.getModifiedBy(), "Should have a person who modified.");
+        assertEquals(expectedWithValues.getUnixTimestamp(), resultHasValues.getUnixTimestamp(), "Should have a timestamp.");
+        assertEquals(expectedWithValues.getModificationId(), resultHasValues.getModificationId(),"Modification Id");
+        assertEquals(expectedWithValues.getIncidentId(), resultHasValues.getIncidentId(), "Incident id");
+        assertEquals(expectedWithValues.getServicePersonId(), resultHasValues.getServicePersonId(),"Service person id");
 
-        assertEquals(expectedNoModification.getModifiedBy(), resultNoModification.getModifiedBy());
-        assertEquals(expectedNoModification.getModifiedDateTime(), resultNoModification.getUnixTimestamp());
+        assertEquals(expectedNoModification.getModifiedBy(), resultNoModification.getModifiedBy(),"Should have no modifier.");
+        assertEquals(expectedNoModification.getUnixTimestamp(), resultNoModification.getUnixTimestamp(),"Should not have a timestamp");
+        assertEquals(expectedNoModification.getModificationId(), resultNoModification.getModificationId(),"Modification Id");
+        assertEquals(expectedNoModification.getIncidentId(), resultNoModification.getIncidentId(), "Incident id");
+        assertEquals(expectedNoModification.getServicePersonId(), resultNoModification.getServicePersonId(),"Service person id");
     }
 
     void insertTestCases(Connection connection){
@@ -409,18 +416,28 @@ class SqliteDatabaseTest {
         };
     }
 
-    ModificationInfo expectedLatestModificationInfo(){
+    ModificationInfo[] expectedLatestModificationInfo(){
 
-        ModificationInfo expectedInfo = new ModificationInfo(
+        ModificationInfo expectedWithModification = new ModificationInfo(
                 1L,
                 1748535492L,
                 1L,
                 1L
         );
+        expectedWithModification.setModifiedBy("Patrick Star");
 
-        expectedInfo.setModifiedBy("Patrick Star");
-        
-        return expectedInfo;
+        ModificationInfo expectedWithNoModification = new ModificationInfo(
+                0L,
+                0L,
+                2L,
+                0L
+        );
+        expectedWithNoModification.setModifiedBy("");
+
+        return new ModificationInfo[]{
+                expectedWithModification,
+                expectedWithNoModification
+        };
     }
 
     String timestamp(){

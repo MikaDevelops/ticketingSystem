@@ -327,7 +327,45 @@ public class SqliteDatabase implements DataBaseService{
 
     @Override
     public ModificationInfo getLatestModificationInfo(long id) {
-        return null;
+
+        ModificationInfo modificationInfo = new ModificationInfo(
+                0L, 0L, id, 0L
+        );
+        modificationInfo.setModifiedBy("");
+
+        try( Connection connection = this.getConnection(); ){
+            String sqlString = """
+                    SELECT
+                        modification.modification_id,
+                        modification.timestamp_unix,
+                        modification.incident_id,
+                        modification.person_id,
+                        service_person.name
+                    FROM modification
+                    LEFT JOIN service_person ON service_person.person_id = modification.person_id
+                    WHERE modification.incident_id = ?
+                    ORDER BY modification_id DESC LIMIT 1
+                    """;
+
+            PreparedStatement statement = connection.prepareStatement(sqlString);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            connection.commit();
+
+            if (resultSet.next()){
+                modificationInfo.setModificationId(resultSet.getLong("modification_id"));
+                modificationInfo.setIncidentId(resultSet.getLong("incident_id"));
+                modificationInfo.setServicePersonId(resultSet.getLong("person_id"));
+                modificationInfo.setUnixTimestamp(resultSet.getLong("timestamp_unix"));
+                modificationInfo.setModifiedBy(this.handleNullString(resultSet.getString("name")));
+            }
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return modificationInfo;
     }
 
     @Override
