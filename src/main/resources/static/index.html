@@ -21,6 +21,32 @@
             }
         }
 
+        async function loadLastEditInfo(incidentId){
+            try{
+                const response = await fetch(`http://localhost:8080/api/v1/latest_modification/${incidentId}`);
+                if(!response.ok) throw new Error(`response status: ${response.status}`);
+
+                let editInfo = await response.json();
+                if (incidentUpdated(editInfo)) console.log("incident edited in the db");
+                else console.log("incident not edited in db")
+            }
+            catch(error){
+                alert(error.message);
+            }
+        }
+
+        function incidentUpdated(editInfo){
+            let incidentDataToCheck = getIncidentById(editInfo.incidentId);
+            console.log(incidentDataToCheck)
+            if(
+                editInfo.unixTimestamp === incidentDataToCheck.modifiedDateTime
+                && editInfo.modifiedBy === incidentDataToCheck.modifiedBy
+            ){
+                return false;
+            }
+            else return true;
+        }
+
         function listAllIncidents(){
             let incidentElement = document.getElementById("case-list");
             incidentElement.replaceChildren();
@@ -131,6 +157,7 @@
         }
 
         function getIncidentById (id){
+            console.log(id)
             return incidentsData.find(({incidentId})=>incidentId == id);
         }
 
@@ -139,6 +166,8 @@
             incident.notes = event.target.value;
             localStorage.setItem(event.target.id, event.target.value);
         }
+
+        
 
         loadAllIncidents();
         
@@ -163,5 +192,6 @@
   <h1>This is the ticketing service web page</h1>
   <div id="casedata"></div>
   <div id="case-list" class="case-list-container"></div>
+  <button onclick="loadLastEditInfo(1)">testbutton</button>
 </body>
 </html>
