@@ -7,6 +7,7 @@
 
         var incidentsData;
         var editableFields = ["notes"];
+        var changedIncident;
         
         async function loadAllIncidents(){
             try{
@@ -27,12 +28,39 @@
                 if(!response.ok) throw new Error(`response status: ${response.status}`);
 
                 let editInfo = await response.json();
-                if (incidentUpdated(editInfo)) console.log("incident edited in the db");
-                else console.log("incident not edited in db")
+                if (incidentUpdated(editInfo)){
+                    console.log("incident edited in the db");
+                    await loadIncidentById(incidentId);
+                    compareIncidentFields(incidentId);
+                }
+                else{ 
+                    console.log("incident not edited in db");
+                }
             }
             catch(error){
                 alert(error.message);
             }
+        }
+
+        async function loadIncidentById(id){
+            try {
+                const response = await fetch(`http://localhost:8080/api/v1/incidents/${id}`);
+                if (!response.ok) throw new Error(`response status: ${response.status}`);
+                changedIncident = await response.json();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        function compareIncidentFields(id){
+            let incidentInFrontEnd = getIncidentById(id);
+            let changedValues = [];
+            for(key in incidentInFrontEnd){
+                if(incidentInFrontEnd.key != changedIncident.key){
+                    changedValues.push(key);
+                }
+            }
+
         }
 
         function incidentUpdated(editInfo){
@@ -71,7 +99,7 @@
 
         function openIncident(event){
             
-            function makeRow(key, value, type){
+            function makeRow(key, value, type, changed){
 
                 let row = document.createElement("TR");
                 let keyCell = document.createElement("TD");
@@ -85,6 +113,7 @@
                     
                     let notesDifferRemote = false;
                     let txtAreaRemoteNotes = null;
+                    let txtAreaChanged = null;
 
                     if(localStorage.getItem(notesId)){
                         txtArea.value = localStorage.getItem(notesId);
@@ -94,11 +123,20 @@
                             notesDifferRemote = true;
                             txtAreaRemoteNotes = document.createElement("textarea");
                             txtAreaRemoteNotes.setAttribute("id","remote-"+notesId);
+                            txtAreaRemoteNotes.setAttribute("readonly", "");
                             txtAreaRemoteNotes.value = value;
                         }
 
                     }else{
                         txtArea.value = value;
+                    }
+
+                    if(changed){
+                        notesDifferRemote = true;
+                        txtAreaChanged = document.createElement("textarea");
+                        txtAreaChanged.setAttribute("id","changed-remote-"+notesId);
+                        txtAreaChanged.setAttribute("readonly", "");
+                        txtAreaChanged.value = value;
                     }
 
                     txtArea.addEventListener("input", updateNotesTxt);
@@ -108,7 +146,8 @@
                         valueCell.appendChild(document.createElement("br"));
                         valueCell.append("Below notes from database.")
                         valueCell.appendChild(document.createElement("br"));
-                        valueCell.appendChild(txtAreaRemoteNotes);
+                        if(txtAreaRemoteNotes) valueCell.appendChild(txtAreaRemoteNotes);
+                        if(txtAreaChanged) valueCell.appendChild(txtAreaRemoteNotes);
                     }
 
                 }else{
@@ -116,17 +155,22 @@
                 }
                 
                 row.append(keyCell,valueCell);
-                
+
                 return row;
             }
 
             function findIncidentId(incidentId){
                 return incidentsData.findIndex(x => x.incidentId==incidentId);
             }
+            function checkIfNotesChanged(id){
+                if(changedIncident.incidentId == id) return true;
+                else return false;
+            }
 
             let displayArea = document.getElementById("casedata");
             displayArea.replaceChildren();
             let singleIncidentData = incidentsData[findIncidentId(event.target.id)];
+            let dataChanged = checkIfNotesChanged(event.target.id);
             let table = document.createElement("TABLE");
             let header = document.createElement("TR");
             let th1 = document.createElement("TH");
@@ -139,8 +183,19 @@
             for(key in singleIncidentData){
                 let type;
                 if (key == "notes") type = "editable";
-                table.appendChild(makeRow(key, singleIncidentData[key], type));
+                table.appendChild(makeRow(key, singleIncidentData[key], type, dataChanged));
             }
+
+            let btnRow = document.createElement("TR");
+            let saveBtnCell = document.createElement("TD");
+            let saveBtn = document.createElement("button");
+            saveBtn.type="button";
+            saveBtn.innerHTML = "Save incident";
+            saveBtnCell.appendChild(saveBtn);
+            let reloadBtnCell = document.createElement("TD");
+            reloadBtnCell.innerHTML = "reload data";
+            btnRow.append(saveBtnCell,reloadBtnCell);
+            table.appendChild(btnRow);
 
             displayArea.append(table);
 
@@ -167,7 +222,6 @@
             localStorage.setItem(event.target.id, event.target.value);
         }
 
-        
 
         loadAllIncidents();
         
