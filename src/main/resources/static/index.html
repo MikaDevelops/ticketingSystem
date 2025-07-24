@@ -28,10 +28,18 @@
                 if(!response.ok) throw new Error(`response status: ${response.status}`);
 
                 let editInfo = await response.json();
+
+                // if data updated load data
                 if (incidentUpdated(editInfo)){
-                    console.log("incident edited in the db");
                     await loadIncidentById(incidentId);
-                    compareIncidentFields(incidentId);
+                    let changedValue = {
+                        notes: changedIncident.notes,
+                        editor: changedIncident.modifiedBy,
+                        modificationTimeStamp: changedIncident.modifiedDateTime
+                    };
+                    let incident = getIncidentById(incidentId);
+                    incident.changedData = changedValue;
+                    changedIncident = undefined;
                 }
                 else{ 
                     console.log("incident not edited in db");
@@ -60,12 +68,12 @@
                     changedValues.push(key);
                 }
             }
-
+            console.log(changedValues);
+            return changedValues;
         }
 
         function incidentUpdated(editInfo){
             let incidentDataToCheck = getIncidentById(editInfo.incidentId);
-            console.log(incidentDataToCheck)
             if(
                 editInfo.unixTimestamp === incidentDataToCheck.modifiedDateTime
                 && editInfo.modifiedBy === incidentDataToCheck.modifiedBy
@@ -97,7 +105,7 @@
             }
         }
 
-        function openIncident(event){
+        async function openIncident(event){
             
             function makeRow(key, value, type, changed){
 
@@ -162,15 +170,17 @@
             function findIncidentId(incidentId){
                 return incidentsData.findIndex(x => x.incidentId==incidentId);
             }
-            function checkIfNotesChanged(id){
-                if(changedIncident.incidentId == id) return true;
+            function checkIfNotesChanged(incident){
+                if(incident.changedValue) return true;
                 else return false;
             }
+
+            await loadLastEditInfo(event.target.id);
 
             let displayArea = document.getElementById("casedata");
             displayArea.replaceChildren();
             let singleIncidentData = incidentsData[findIncidentId(event.target.id)];
-            let dataChanged = checkIfNotesChanged(event.target.id);
+            let dataChanged = checkIfNotesChanged(singleIncidentData);
             let table = document.createElement("TABLE");
             let header = document.createElement("TR");
             let th1 = document.createElement("TH");
@@ -212,7 +222,6 @@
         }
 
         function getIncidentById (id){
-            console.log(id)
             return incidentsData.find(({incidentId})=>incidentId == id);
         }
 
