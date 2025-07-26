@@ -26,6 +26,6 @@ public class IncidentController {
 
     @GetMapping("/{incidentId}")
     public ResponseEntity<Incident> getIncidentById(@PathVariable long incidentId){
-        return  ResponseEntity.ok( dataBaseService.getIncidentById(incidentId) );
+        return ResponseEntity.ok( dataBaseService.getIncidentById(incidentId) );
     }
 }
