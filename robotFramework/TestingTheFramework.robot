@@ -44,6 +44,7 @@ Incident notes saved to database
 *** Keywords ***
 Open browser to incidents page
     Open Browser    ${site-url}    browser=${browser-to-use}
+    Wait Until Element Is Visible    id:case-list >> id:5
     Title Should Be    Ticketing System
 
 Incident 1 should be on list
@@ -57,11 +58,13 @@ Incident 4 should be on list
 
 Incident 1 should be on caseview
     Click Element    id:case-list >> id:1
+    Wait Until Element Is Visible    id:casedata >> tag:table >> xpath://tr[6]/td[2]
+    Sleep    3
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[2]/td[2]   1
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[3]/td[2]   15120
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[4]/td[2]   test subject
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[5]/td[2]   test description
-    Element Text Should Be    id:casedata >> tag:table >> xpath://tr[6]/td[2]   test notes
+    Textarea Value Should Be    id:casedata >> tag:table >> xpath://tr[6]/td[2]/textarea[1]   test notes
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[7]/td[2]   1,2,3,4
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[8]/td[2]   1
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[9]/td[2]   1
@@ -78,11 +81,12 @@ Incident 1 should be on caseview
 
 Incident 2 should be on caseview
     Click Element    id:case-list >> id:2
+    Wait Until Element Is Visible    id:casedata >> tag:table >> xpath://tr[6]/td[2]
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[2]/td[2]   2
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[3]/td[2]   15121
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[4]/td[2]   test subject442
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[5]/td[2]   test description442
-    Element Text Should Be    id:casedata >> tag:table >> xpath://tr[6]/td[2]   test note33s2
+    Textarea Value Should Be    id:casedata >> tag:table >> xpath://tr[6]/td[2]/textarea[1]   test note33s2
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[7]/td[2]   2,3
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[8]/td[2]   2
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[9]/td[2]   2
@@ -98,6 +102,7 @@ Incident 2 should be on caseview
     Element Text Should Be    id:casedata >> tag:table >> xpath://tr[19]/td[2]   high
 
 Open incident 5 to caseview
+    Wait Until Element Is Visible    id:case-list >> id:5
     Wait For Condition    return document.readyState == "complete"
     Click Element    id:case-list >> id:5
 
@@ -111,6 +116,7 @@ Insert notes to notes field
 
 Check notes has updated value
     [Arguments]    ${updated_value}
+    Wait Until Element Is Visible    id:case-list >> id:5
     Wait For Condition    return document.readyState == "complete"
     Click Element    id:case-list >> id:5
     Textarea Value Should Be    id:casedata >> tag:table >> xpath://tr[6]/td[2]/textarea[1]    ${updated_value}
